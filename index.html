@@ -1,771 +1,1911 @@
-Title: Understanding the Content of pasted_content.txt - Manus
-Lite
-He completado la creación del Sistema Zen de Decisión: Tu Brújula de Claridad.
-Esta herramienta interactiva ha sido diseñada meticulosamente para ofrecer un alto valor percibido, utilizando una paleta de colores profesional y moderna basada en la psicología del color para el nicho de salud mental. Funciona de manera totalmente autónoma en un único archivo HTML, sin dependencias externas ni necesidad de conexión a internet, y utiliza localStorage para guardar el progreso del usuario de forma persistente.
-La herramienta incluye:
-Seis pestañas interactivas: Inicio, Plantilla de Decisiones Diarias, Estrategia de Decisión Rápida, Mini-curso en Audio (Cápsulas de Sabiduría), Guía de Fatiga Mental y un panel de Mi Progreso.
-Contenido de valor: Más de 60 ítems de contenido original, incluyendo ejercicios prácticos, frases motivacionales y pasos estratégicos.
-Diseño Responsive: Optimizado para una experiencia fluida tanto en desktop como en dispositivos móviles.
-Indicador de Progreso: Un sistema visual que motiva al usuario a completar las secciones.
-He verificado exhaustivamente la funcionalidad, asegurándome de que la navegación sea fluida, los datos se guarden correctamente al recargar y el diseño se vea impecable.
-¿Quieres que ajuste alguna pestaña, cambie el diseño o agregue alguna funcionalidad antes de que lo descargues?
-index.html
-Código · 34.72 KB
-Ver todos los archivos en esta tarea
-Tarea completada
-¿Cómo fue este resultado?
-Seguimientos sugeridos
-
-
-
-Computadoras en la nube
-Nuevo
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema Zen de Decisión: Tu Brújula de Claridad</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-bg: #F7F9FC;
-            --card-bg: #FFFFFF;
-            --primary-accent: #4A90E2;
-            --secondary-accent: #50E3C2;
-            --text-color: #333333;
-            --light-text-color: #666666;
-            --border-color: #E0E0E0;
-            --shadow-color: rgba(0, 0, 0, 0.05);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Framework de Decisión Rápida en 3 Pasos</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #F0EDE8;
+    --bg-card: #FAFAF8;
+    --bg-card2: #F5F3EE;
+    --accent: #2D6A4F;
+    --accent-light: #52B788;
+    --accent2: #B7935A;
+    --accent2-light: #D4B483;
+    --text: #1A1A2E;
+    --text-mid: #4A4A6A;
+    --text-soft: #8888AA;
+    --border: rgba(45,106,79,0.12);
+    --shadow: 0 4px 24px rgba(45,106,79,0.08);
+    --shadow-lg: 0 12px 48px rgba(45,106,79,0.14);
+    --radius: 16px;
+    --radius-sm: 10px;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
 
-        body {
-            font-family: 'Inter', 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: var(--primary-bg);
-            color: var(--text-color);
-            line-height: 1.6;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .container {
-            max-width: 960px;
-            margin: 20px auto;
-            padding: 20px;
-            background-color: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px var(--shadow-color);
-            flex-grow: 1;
-        }
+  html { scroll-behavior: smooth; }
 
-        h1, h2, h3, h4, h5, h6 {
-            color: var(--primary-accent);
-            font-family: 'Poppins', sans-serif;
-            margin-top: 0;
-        }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
 
-        h1 {
-            font-size: 2.2em;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+  /* ── HEADER ── */
+  .app-header {
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 24px 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 20px rgba(45,106,79,0.06);
+  }
 
-        h2 {
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
 
-        p {
-            margin-bottom: 15px;
-        }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
 
-        .tab-bar {
-            display: flex;
-            justify-content: space-around;
-            background-color: var(--card-bg);
-            border-bottom: 1px solid var(--border-color);
-            border-radius: 12px 12px 0 0;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin-bottom: 20px;
-        }
+  .brand-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 21.6px;
+    box-shadow: 0 4px 12px rgba(45,106,79,0.25);
+  }
 
-        .tab-button {
-            background-color: transparent;
-            border: none;
-            padding: 15px 20px;
-            font-size: 1em;
-            font-weight: 600;
-            color: var(--light-text-color);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            flex-shrink: 0;
-            position: relative;
-        }
+  .brand-name {
+    font-family: var(--serif);
+    font-size: 1.26rem;
+    color: var(--text);
+    line-height: 1.2;
+  }
 
-        .tab-button:hover {
-            color: var(--primary-accent);
-        }
+  .brand-sub {
+    font-size: 0.864rem;
+    color: var(--text-soft);
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
 
-        .tab-button.active {
-            color: var(--primary-accent);
-        }
+  /* Progress bar */
+  .progress-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 300px;
+  }
 
-        .tab-button.active::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background-color: var(--primary-accent);
-            border-radius: 2px 2px 0 0;
-        }
+  .progress-label {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    white-space: nowrap;
+    font-weight: 500;
+  }
 
-        .tab-content {
-            padding: 20px 0;
-        }
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-card2);
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
 
-        .hidden {
-            display: none;
-        }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+    border-radius: 99px;
+    transition: width 0.6s cubic-bezier(.4,0,.2,1);
+  }
 
-        .card {
-            background-color: var(--primary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-        }
+  .progress-pct {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 32px;
+    text-align: right;
+  }
 
-        .button {
-            background-color: var(--primary-accent);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            padding: 12px 25px;
-            font-size: 1.1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-        }
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 2px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: 1px;
+  }
 
-        .button:hover {
-            background-color: #3A7BD5; /* Un tono ligeramente más oscuro */
-            transform: translateY(-2px);
-        }
+  .tabs::-webkit-scrollbar { display: none; }
 
-        .button:active {
-            transform: translateY(0);
-        }
+  .tab-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px 16px;
+    font-family: var(--sans);
+    font-size: 0.984rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+    position: relative;
+  }
 
-        textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            font-family: 'Inter', sans-serif;
-            font-size: 1em;
-            margin-top: 10px;
-            box-sizing: border-box;
-            resize: vertical;
-        }
+  .tab-btn:hover { color: var(--accent); }
 
-        input[type="checkbox"] {
-            margin-right: 10px;
-            transform: scale(1.2);
-        }
+  .tab-btn.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    font-weight: 600;
+  }
 
-        .checklist-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-            background-color: var(--card-bg);
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid var(--border-color);
-        }
+  .tab-dot {
+    display: inline-block;
+    width: 6px; height: 6px;
+    background: var(--accent-light);
+    border-radius: 50%;
+    margin-left: 6px;
+    vertical-align: middle;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
 
-        .checklist-item label {
-            flex-grow: 1;
-            cursor: pointer;
-        }
+  .tab-dot.done { opacity: 1; }
 
-        .progress-bar-container {
-            width: 100%;
-            background-color: var(--border-color);
-            border-radius: 5px;
-            margin-bottom: 20px;
-            height: 10px;
-            overflow: hidden;
-        }
+  /* ── MAIN CONTENT ── */
+  .main { max-width: 780px; margin: 0 auto; padding: 32px 20px 80px; }
 
-        .progress-bar {
-            height: 100%;
-            width: 0%;
-            background-color: var(--secondary-accent);
-            border-radius: 5px;
-            transition: width 0.5s ease-in-out;
-        }
+  .tab-panel { display: none; animation: fadeUp 0.35s ease; }
+  .tab-panel.active { display: block; }
 
-        .progress-text {
-            text-align: center;
-            margin-bottom: 10px;
-            font-weight: 600;
-            color: var(--primary-accent);
-        }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
 
-        /* Responsive adjustments */
-        @media (max-width: 768px) {
-            .container {
-                margin: 10px;
-                padding: 15px;
-            }
+  /* ── SECTION HEADERS ── */
+  .section-header {
+    margin-bottom: 28px;
+  }
 
-            h1 {
-                font-size: 1.8em;
-            }
+  .section-tag {
+    display: inline-block;
+    padding: 4px 12px;
+    background: rgba(45,106,79,0.10);
+    color: var(--accent);
+    border-radius: 99px;
+    font-size: 0.864rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
 
-            h2 {
-                font-size: 1.5em;
-            }
+  .section-title {
+    font-family: var(--serif);
+    font-size: clamp(2.04rem, 4.8vw, 2.76rem);
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
 
-            .tab-button {
-                padding: 12px 15px;
-                font-size: 0.9em;
-            }
-        }
+  .section-desc {
+    font-size: 1.2rem;
+    color: var(--text-mid);
+    max-width: 580px;
+    line-height: 1.7;
+  }
 
-        @media (max-width: 480px) {
-            .tab-bar {
-                justify-content: flex-start;
-            }
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    box-shadow: var(--shadow);
+    margin-bottom: 20px;
+  }
 
-            .tab-button {
-                font-size: 0.8em;
-                padding: 10px 12px;
-            }
-        }
+  .card-title {
+    font-family: var(--serif);
+    font-size: 1.38rem;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
 
-        blockquote {
-            background-color: #eef4fb;
-            border-left: 5px solid var(--primary-accent);
-            margin: 1.5em 0;
-            padding: 1em 20px;
-            color: #444;
-            font-style: italic;
-            border-radius: 0 8px 8px 0;
-        }
+  .card-sub {
+    font-size: 1.056rem;
+    color: var(--text-soft);
+    margin-bottom: 16px;
+  }
 
-        blockquote p {
-            margin: 0;
-        }
+  /* ── BUTTONS ── */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: var(--sans);
+    font-size: 1.08rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+  }
 
-        .audio-player-card {
-            text-align: center;
-            padding: 30px 20px;
-        }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent-light));
+    color: white;
+    box-shadow: 0 4px 16px rgba(45,106,79,0.25);
+  }
 
-        .audio-player-card .button {
-            margin-top: 20px;
-        }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(45,106,79,0.35);
+  }
 
-        .audio-quote {
-            font-size: 1.2em;
-            font-style: italic;
-            margin-bottom: 20px;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: var(--primary-accent);
-        }
+  .btn-secondary {
+    background: var(--bg-card2);
+    color: var(--accent);
+    border: 1.5px solid var(--border);
+  }
 
-        .exercise-item {
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: var(--primary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            box-shadow: 0 1px 5px var(--shadow-color);
-        }
+  .btn-secondary:hover { background: var(--bg); }
 
-        .exercise-item h3 {
-            color: var(--primary-accent);
-            margin-top: 0;
-            margin-bottom: 10px;
-        }
+  .btn-accent2 {
+    background: linear-gradient(135deg, var(--accent2), var(--accent2-light));
+    color: white;
+    box-shadow: 0 4px 16px rgba(183,147,90,0.25);
+  }
 
-        .exercise-item p {
-            margin-bottom: 10px;
-        }
+  .btn-accent2:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(183,147,90,0.35);
+  }
 
-        .progress-summary {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 30px;
-        }
+  /* ── WELCOME / INICIO ── */
+  .welcome-hero {
+    background: linear-gradient(135deg, #2D6A4F 0%, #52B788 100%);
+    border-radius: 20px;
+    padding: 40px 32px;
+    color: white;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
 
-        .progress-metric {
-            background-color: var(--primary-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            padding: 20px;
-            text-align: center;
-            flex: 1 1 calc(33% - 20px);
-            min-width: 200px;
-            box-shadow: 0 2px 10px var(--shadow-color);
-        }
+  .welcome-hero::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
 
-        .progress-metric h3 {
-            color: var(--secondary-accent);
-            font-size: 2em;
-            margin-bottom: 5px;
-        }
+  .welcome-hero::after {
+    content: '';
+    position: absolute;
+    bottom: -60px; left: -20px;
+    width: 160px; height: 160px;
+    background: rgba(255,255,255,0.04);
+    border-radius: 50%;
+  }
 
-        .progress-metric p {
-            color: var(--light-text-color);
-            font-size: 0.9em;
-            margin: 0;
-        }
+  .welcome-emoji { font-size: 3.0rem; margin-bottom: 16px; display: block; }
 
-        .motivation-message {
-            margin-top: 30px;
-            padding: 20px;
-            background-color: #eef4fb;
-            border-left: 5px solid var(--secondary-accent);
-            border-radius: 0 8px 8px 0;
-            font-style: italic;
-            color: #444;
-            text-align: center;
-        }
+  .welcome-title {
+    font-family: var(--serif);
+    font-size: clamp(1.92rem, 4.8vw, 2.64rem);
+    line-height: 1.2;
+    margin-bottom: 16px;
+  }
 
-        footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 30px;
-            color: var(--light-text-color);
-            font-size: 0.9em;
-            border-top: 1px solid var(--border-color);
-            background-color: var(--card-bg);
-        }
+  .welcome-body {
+    font-size: 1.2rem;
+    opacity: 0.9;
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 28px;
+  }
 
-    </style>
+  .mechanism-name {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 99px;
+    padding: 6px 18px;
+    font-size: 0.96rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 560px) { .steps-grid { grid-template-columns: 1fr; } }
+
+  .step-card {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+
+  .step-num {
+    font-family: var(--serif);
+    font-size: 2.4rem;
+    font-style: italic;
+    opacity: 0.7;
+    display: block;
+    margin-bottom: 4px;
+  }
+
+  .step-label {
+    font-size: 0.984rem;
+    font-weight: 600;
+  }
+
+  .step-desc-sm {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 4px;
+  }
+
+  /* Info cards */
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  @media (max-width: 480px) { .info-grid { grid-template-columns: 1fr; } }
+
+  .info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    box-shadow: var(--shadow);
+  }
+
+  .info-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+
+  .info-label {
+    font-size: 0.936rem;
+    color: var(--text-soft);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+
+  .info-value {
+    font-family: var(--serif);
+    font-size: 1.32rem;
+    color: var(--text);
+  }
+
+  /* ── CHECKLIST / DECISIONS ── */
+  .add-decision-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+
+  .input-text {
+    flex: 1;
+    padding: 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: var(--sans);
+    font-size: 1.08rem;
+    background: var(--bg-card);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .input-text:focus { border-color: var(--accent); }
+
+  .input-text::placeholder { color: var(--text-soft); }
+
+  .decision-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+
+  .decision-item.done {
+    background: rgba(82,183,136,0.06);
+    border-color: rgba(82,183,136,0.25);
+  }
+
+  .decision-item.done .decision-text {
+    text-decoration: line-through;
+    color: var(--text-soft);
+  }
+
+  .custom-check {
+    width: 22px; height: 22px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    flex-shrink: 0;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+    margin-top: 2px;
+    background: white;
+  }
+
+  .custom-check.checked {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .decision-body { flex: 1; }
+
+  .decision-text {
+    font-size: 1.116rem;
+    color: var(--text);
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .decision-hint {
+    font-size: 0.936rem;
+    color: var(--text-soft);
+    margin-bottom: 8px;
+  }
+
+  .decision-note {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 0.984rem;
+    background: var(--bg);
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    min-height: 52px;
+    transition: border-color 0.2s;
+  }
+
+  .decision-note:focus { border-color: var(--accent); }
+
+  .delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--text-soft);
+    padding: 2px;
+    opacity: 0.5;
+    transition: opacity 0.2s;
+    flex-shrink: 0;
+  }
+
+  .delete-btn:hover { opacity: 1; color: #e74c3c; }
+
+  /* ── STRATEGY STEPS ── */
+  .strategy-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+  }
+
+  .strategy-step.done-step {
+    border-color: rgba(82,183,136,0.30);
+    background: rgba(82,183,136,0.04);
+  }
+
+  .step-number {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    background: var(--bg-card2);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--serif);
+    font-size: 1.2rem;
+    font-style: italic;
+    color: var(--accent);
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+
+  .strategy-step.done-step .step-number {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  .step-content { flex: 1; }
+
+  .step-title-text {
+    font-weight: 600;
+    font-size: 1.14rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .step-body-text {
+    font-size: 1.02rem;
+    color: var(--text-mid);
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .step-reflect {
+    width: 100%;
+    padding: 9px 13px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 0.984rem;
+    background: var(--bg);
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    min-height: 56px;
+    transition: border-color 0.2s;
+  }
+
+  .step-reflect:focus { border-color: var(--accent); }
+
+  .mark-done-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 14px;
+    border-radius: 8px;
+    border: 1.5px solid var(--border);
+    background: var(--bg-card);
+    font-family: var(--sans);
+    font-size: 0.96rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-mid);
+    transition: all 0.2s;
+    margin-top: 10px;
+  }
+
+  .mark-done-btn:hover, .strategy-step.done-step .mark-done-btn {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: white;
+  }
+
+  /* ── AUDIO / FRASES ── */
+  .audio-player {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+    border-radius: 20px;
+    padding: 36px 32px;
+    color: white;
+    text-align: center;
+    margin-bottom: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .audio-player::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 180px; height: 180px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 50%;
+  }
+
+  .audio-icon {
+    font-size: 3.6rem;
+    margin-bottom: 20px;
+    display: block;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+
+  .audio-frase {
+    font-family: var(--serif);
+    font-size: clamp(1.32rem, 3.6vw, 1.68rem);
+    line-height: 1.5;
+    margin-bottom: 8px;
+    font-style: italic;
+  }
+
+  .audio-autor {
+    font-size: 0.96rem;
+    opacity: 0.7;
+    margin-bottom: 24px;
+  }
+
+  .listen-count {
+    font-size: 0.936rem;
+    opacity: 0.65;
+    margin-top: 16px;
+  }
+
+  .audio-wave {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;
+    height: 28px;
+    margin: 16px 0;
+  }
+
+  .wave-bar {
+    width: 3px;
+    background: rgba(255,255,255,0.6);
+    border-radius: 99px;
+    animation: wave 1.2s ease-in-out infinite;
+  }
+
+  .wave-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+  .wave-bar:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+  .wave-bar:nth-child(3) { animation-delay: 0.2s; height: 24px; }
+  .wave-bar:nth-child(4) { animation-delay: 0.3s; height: 20px; }
+  .wave-bar:nth-child(5) { animation-delay: 0.4s; height: 28px; }
+  .wave-bar:nth-child(6) { animation-delay: 0.5s; height: 20px; }
+  .wave-bar:nth-child(7) { animation-delay: 0.4s; height: 24px; }
+  .wave-bar:nth-child(8) { animation-delay: 0.3s; height: 16px; }
+  .wave-bar:nth-child(9) { animation-delay: 0.2s; height: 10px; }
+
+  @keyframes wave {
+    0%, 100% { transform: scaleY(0.5); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  .wave-bar.paused { animation-play-state: paused; }
+
+  .frases-list {
+    display: grid;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .frase-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .frase-card:hover {
+    border-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  .frase-card.active-frase {
+    border-color: var(--accent);
+    background: rgba(45,106,79,0.05);
+  }
+
+  .frase-num {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 1.44rem;
+    color: var(--accent);
+    opacity: 0.6;
+    flex-shrink: 0;
+    width: 28px;
+  }
+
+  .frase-text {
+    font-size: 1.056rem;
+    color: var(--text-mid);
+    line-height: 1.5;
+  }
+
+  /* ── EXERCISES ── */
+  .exercise-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 22px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow);
+    transition: all 0.2s;
+  }
+
+  .exercise-card.completed {
+    border-color: rgba(183,147,90,0.35);
+    background: rgba(183,147,90,0.04);
+  }
+
+  .exercise-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  .exercise-emoji {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    background: var(--bg-card2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.44rem;
+    flex-shrink: 0;
+    border: 1px solid var(--border);
+  }
+
+  .exercise-title {
+    font-weight: 600;
+    font-size: 1.14rem;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .exercise-time {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    font-weight: 500;
+  }
+
+  .exercise-instructions {
+    font-size: 1.044rem;
+    color: var(--text-mid);
+    line-height: 1.65;
+    margin-bottom: 14px;
+  }
+
+  .exercise-steps {
+    list-style: none;
+    margin-bottom: 14px;
+  }
+
+  .exercise-steps li {
+    font-size: 1.02rem;
+    color: var(--text-mid);
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.04);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .exercise-steps li::before {
+    content: '→';
+    color: var(--accent);
+    font-size: 0.9rem;
+    flex-shrink: 0;
+  }
+
+  .exercise-response {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: var(--sans);
+    font-size: 1.02rem;
+    background: var(--bg);
+    color: var(--text);
+    resize: vertical;
+    outline: none;
+    min-height: 72px;
+    transition: border-color 0.2s;
+    margin-bottom: 12px;
+  }
+
+  .exercise-response:focus { border-color: var(--accent2); }
+
+  /* ── PROGRESS TAB ── */
+  .progress-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+
+  @media (max-width: 520px) { .progress-stats { grid-template-columns: 1fr; } }
+
+  .stat-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    text-align: center;
+    box-shadow: var(--shadow);
+  }
+
+  .stat-number {
+    font-family: var(--serif);
+    font-size: 2.88rem;
+    color: var(--accent);
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 0.936rem;
+    color: var(--text-soft);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .section-progress {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 20px;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: var(--shadow);
+  }
+
+  .sp-icon { font-size: 1.68rem; flex-shrink: 0; }
+
+  .sp-body { flex: 1; }
+
+  .sp-name {
+    font-weight: 600;
+    font-size: 1.08rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .sp-bar {
+    height: 6px;
+    background: var(--bg-card2);
+    border-radius: 99px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .sp-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width 0.8s cubic-bezier(.4,0,.2,1);
+    background: linear-gradient(90deg, var(--accent), var(--accent-light));
+  }
+
+  .sp-pct {
+    font-size: 0.984rem;
+    font-weight: 700;
+    color: var(--accent);
+    flex-shrink: 0;
+    min-width: 36px;
+    text-align: right;
+  }
+
+  .achievement {
+    background: linear-gradient(135deg, var(--accent2) 0%, var(--accent2-light) 100%);
+    border-radius: 16px;
+    padding: 24px;
+    color: white;
+    text-align: center;
+    margin-top: 24px;
+  }
+
+  .achievement h3 {
+    font-family: var(--serif);
+    font-size: 1.44rem;
+    margin-bottom: 8px;
+  }
+
+  .achievement p { font-size: 1.056rem; opacity: 0.9; line-height: 1.6; }
+
+  .reset-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: 1.5px solid rgba(231,76,60,0.2);
+    background: rgba(231,76,60,0.05);
+    font-family: var(--sans);
+    font-size: 0.96rem;
+    font-weight: 600;
+    cursor: pointer;
+    color: #c0392b;
+    transition: all 0.2s;
+    margin-top: 24px;
+  }
+
+  .reset-btn:hover { background: rgba(231,76,60,0.12); }
+
+  /* ── UTILITIES ── */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 24px 0;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 99px;
+    font-size: 0.864rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+  }
+
+  .badge-green { background: rgba(82,183,136,0.15); color: var(--accent); }
+  .badge-gold  { background: rgba(183,147,90,0.15); color: var(--accent2); }
+
+  .empty-state {
+    text-align: center;
+    padding: 36px 20px;
+    color: var(--text-soft);
+  }
+
+  .empty-state span { font-size: 2.4rem; display: block; margin-bottom: 12px; }
+  .empty-state p { font-size: 1.08rem; }
+
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--accent);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-size: 1.02rem;
+    font-weight: 500;
+    box-shadow: var(--shadow-lg);
+    z-index: 999;
+    transform: translateY(80px);
+    opacity: 0;
+    transition: all 0.35s cubic-bezier(.4,0,.2,1);
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  @media (max-width: 600px) {
+    .main { padding: 20px 14px 80px; }
+    .welcome-hero { padding: 28px 20px; }
+    .audio-player { padding: 28px 20px; }
+  }
+</style>
 </head>
 <body>
-    <header>
-        <h1>Sistema Zen de Decisión: Tu Brújula de Claridad</h1>
-    </header>
 
-    <div class="container">
-        <div class="progress-text" id="global-progress-text">Progreso General: 0%</div>
-        <div class="progress-bar-container">
-            <div class="progress-bar" id="global-progress-bar"></div>
-        </div>
+<!-- HEADER -->
+<header class="app-header">
+  <div class="header-top">
+    <div class="brand">
+      <div class="brand-icon">🌿</div>
+      <div>
+        <div class="brand-name">Framework de Decisión Rápida</div>
+        <div class="brand-sub">Método CLARA · 3 Pasos</div>
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <span class="progress-label">Avance</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="globalFill" style="width:0%"></div>
+      </div>
+      <span class="progress-pct" id="globalPct">0%</span>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab-btn active" data-tab="inicio" role="tab">🌟 Inicio <span class="tab-dot" id="dot-inicio"></span></button>
+    <button class="tab-btn" data-tab="decisiones" role="tab">📝 Decisiones Diarias <span class="tab-dot" id="dot-decisiones"></span></button>
+    <button class="tab-btn" data-tab="estrategia" role="tab">☄️ Estrategia <span class="tab-dot" id="dot-estrategia"></span></button>
+    <button class="tab-btn" data-tab="audio" role="tab">🎧 Mini-curso <span class="tab-dot" id="dot-audio"></span></button>
+    <button class="tab-btn" data-tab="fatiga" role="tab">💡 Fatiga Mental <span class="tab-dot" id="dot-fatiga"></span></button>
+    <button class="tab-btn" data-tab="progreso" role="tab">📊 Mi Progreso <span class="tab-dot" id="dot-progreso"></span></button>
+  </nav>
+</header>
 
-        <nav class="tab-bar">
-            <button class="tab-button active" data-tab="inicio">Inicio 🌟</button>
-            <button class="tab-button" data-tab="diarias">Decisiones Diarias 📝</button>
-            <button class="tab-button" data-tab="estrategia">Estrategia Rápida ☄️</button>
-            <button class="tab-button" data-tab="audio">Mini-curso Audio 🎧</button>
-            <button class="tab-button" data-tab="fatiga">Guía Fatiga Mental 💡</button>
-            <button class="tab-button" data-tab="progreso">Mi Progreso 📊</button>
-        </nav>
+<main class="main">
 
-        <div id="inicio" class="tab-content">
-            <div class="card">
-                <h2>Bienvenido al Sistema Zen de Decisión: Tu Brújula de Claridad</h2>
-                <blockquote>
-                    <p>¿Te sientes abrumado por las decisiones diarias? ¿La fatiga mental te paraliza ante opciones que antes parecían simples? Entendemos perfectamente esa sensación. Has intentado encontrar claridad, pero la carga emocional de cada elección te agota. Es hora de recuperar el control, de sentir la ligereza de vivir el presente y de tomar decisiones con una confianza renovada. Este no es solo un framework; es tu aliado para transformar la ansiedad en acción, y la duda en determinación. Prepárate para simplificar tu vida y redescubrir la paz mental que mereces.</p>
-                </blockquote>
-                <p>"Bienvenido a tu viaje hacia la claridad decisiva. El Sistema Zen de Decisión está diseñado para liberarte del peso de la indecisión, paso a paso. Aquí aprenderás a navegar tus opciones con calma, confianza y una perspectiva renovada. Haz clic en 'Comenzar' para dar el primer paso hacia una vida más ligera y plena."</p>
-                <button class="button" onclick="showTab(\'diarias\')">Comenzar</button>
-            </div>
-        </div>
-
-        <div id="diarias" class="tab-content hidden">
-            <div class="card">
-                <h2>Plantilla de Decisiones Diarias: Simplifica tu Día</h2>
-                <blockquote>
-                    <p>Las pequeñas decisiones cotidianas pueden acumularse y generar una fatiga mental inesperada. ¿Qué desayunar? ¿Qué ropa ponerme? ¿Qué tarea abordar primero? Esta plantilla está diseñada para desglosar esas elecciones, permitiéndote abordarlas con intención y sin el estrés habitual. Al registrar y reflexionar sobre ellas, transformarás la indecisión en un flujo consciente y empoderador.</p>
-                </blockquote>
-                <div id="daily-decisions-checklist"></div>
-            </div>
-        </div>
-
-        <div id="estrategia" class="tab-content hidden">
-            <div class="card">
-                <h2>Estrategia de Decisión Rápida: Activa tu Claridad</h2>
-                <blockquote>
-                    <p>¿Sientes que las decisiones importantes te detienen? Esta estrategia te ofrece un camino claro y conciso para evaluar opciones y actuar con determinación. No se trata de eliminar la reflexión, sino de optimizarla, transformando la parálisis en un impulso efectivo. Cada paso te acerca a la confianza que anhelas, permitiéndote avanzar sin la carga de la duda.</p>
-                </blockquote>
-                <div id="quick-decision-strategy"></div>
-            </div>
-        </div>
-
-        <div id="audio" class="tab-content hidden">
-            <div class="card audio-player-card">
-                <h2>Mini-curso en Audio: Cápsulas de Sabiduría</h2>
-                <blockquote>
-                    <p>A veces, una pequeña dosis de inspiración o un consejo oportuno es todo lo que necesitamos para cambiar nuestra perspectiva. Este mini-curso en audio está diseñado para ofrecerte precisamente eso: píldoras de sabiduría que puedes escuchar en cualquier momento, ayudándote a recentrarte y a encontrar la calma necesaria para tomar decisiones con claridad. Deja que estas palabras te guíen hacia una mente más serena y decidida.</p>
-                </blockquote>
-                <div class="audio-quote" id="audio-quote-display">Haz clic en 'Escuchar' para una dosis de sabiduría.</div>
-                <button class="button" id="play-audio-quote">Escuchar</button>
-            </div>
-        </div>
-
-        <div id="fatiga" class="tab-content hidden">
-            <div class="card">
-                <h2>Guía de Superación a la Fatiga Mental: Recarga tu Mente</h2>
-                <blockquote>
-                    <p>La fatiga mental es un muro invisible que drena tu energía y nubla tu juicio. Pero no tienes que vivir con ella. Esta guía interactiva te ofrece ejercicios prácticos y herramientas probadas para recargar tu mente, restaurar tu claridad y fortalecer tu resiliencia. Es hora de romper el ciclo del agotamiento y redescubrir la vitalidad que te permite tomar decisiones con confianza y alegría.</p>
-                </blockquote>
-                <div id="mental-fatigue-exercises"></div>
-            </div>
-        </div>
-
-        <div id="progreso" class="tab-content hidden">
-            <div class="card">
-                <h2>Mi Progreso: Tu Camino Hacia la Claridad</h2>
-                <blockquote>
-                    <p>Ver tu progreso es una de las mayores motivaciones. Aquí, podrás visualizar el camino que has recorrido, las decisiones que has tomado y las reflexiones que te han fortalecido. Cada marca de completado, cada nota guardada, es un testimonio de tu compromiso con una vida más consciente y libre de fatiga mental. Celebra tus avances y sigue construyendo la confianza en ti mismo.</p>
-                </blockquote>
-                <div class="progress-summary">
-                    <div class="progress-metric">
-                        <h3><span id="overall-completion">0</span>%</h3>
-                        <p>Completado General</p>
-                    </div>
-                    <div class="progress-metric">
-                        <h3><span id="daily-decisions-count">0</span></h3>
-                        <p>Decisiones Diarias</p>
-                    </div>
-                    <div class="progress-metric">
-                        <h3><span id="strategy-steps-completed">0</span></h3>
-                        <p>Pasos Estrategia</p>
-                    </div>
-                </div>
-                <div class="motivation-message" id="motivation-message">¡Cada paso cuenta!</div>
-            </div>
-        </div>
+  <!-- ═══════ PESTAÑA 1: INICIO ═══════ -->
+  <section class="tab-panel active" id="panel-inicio">
+    <div class="welcome-hero">
+      <span class="mechanism-name">✦ Método CLARA — Claridad, Ligereza, Acción, Reflexión, Avance</span>
+      <span class="welcome-emoji">🌿</span>
+      <h1 class="welcome-title">Ya no tenés que cargar con el peso de cada decisión</h1>
+      <p class="welcome-body">
+        Si alguna vez quedaste paralizada frente a una decisión simple — qué comer, qué responder, qué hacer primero — y sentiste que algo andaba mal en vos, este framework es para vos. <strong>No hay nada roto en tu mente.</strong> Solo un sistema nervioso que llegó al límite y necesita un nuevo camino.
+        El Método CLARA te da ese camino: tres pasos concretos para decidir sin agotarte, recuperar la confianza en tu propio juicio y volver a disfrutar el día a día.
+      </p>
+      <button class="btn" style="background:white;color:var(--accent);font-weight:700;box-shadow:0 4px 20px rgba(0,0,0,0.15);" onclick="goToTab('decisiones')">
+        Comenzar ahora →
+      </button>
     </div>
 
-    <footer>
-        <p>&copy; 2026 Sistema Zen de Decisión. Todos los derechos reservados.</p>
-    </footer>
-    <script>
-        const TABS = ['inicio', 'diarias', 'estrategia', 'audio', 'fatiga', 'progreso'];
-        const TOTAL_SECTIONS = 5; // Excluding 'progreso' tab for completion calculation
+    <div class="steps-grid">
+      <div class="step-card">
+        <span class="step-num">1</span>
+        <div class="step-label">Clarificar</div>
+        <div class="step-desc-sm">¿Realmente importa esta decisión?</div>
+      </div>
+      <div class="step-card">
+        <span class="step-num">2</span>
+        <div class="step-label">Acotar</div>
+        <div class="step-desc-sm">Reduce opciones a 2 o 3. Máximo.</div>
+      </div>
+      <div class="step-card">
+        <span class="step-num">3</span>
+        <div class="step-label">Actuar</div>
+        <div class="step-desc-sm">Decidir suficientemente bien, ya.</div>
+      </div>
+    </div>
 
-        const dailyDecisionsData = [
-            { text: "Elegir qué desayunar 🍎", completed: false, notes: "" },
-            { text: "Decidir qué ropa usar hoy 👕", completed: false, notes: "" },
-            { text: "Priorizar 3 tareas importantes del día 🚀", completed: false, notes: "" },
-            { text: "Elegir un momento para un breve descanso ☕", completed: false, notes: "" },
-            { text: "Decidir qué comer para el almuerzo 🥗", completed: false, notes: "" },
-            { text: "Responder a un email o mensaje pendiente 📧", completed: false, notes: "" },
-            { text: "Elegir una actividad relajante para la tarde 🧘‍♀️", completed: false, notes: "" },
-            { text: "Decidir si hacer ejercicio o caminar 🚶‍♂️", completed: false, notes: "" },
-            { text: "Planificar la cena 🍽️", completed: false, notes: "" },
-            { text: "Elegir un libro o podcast para escuchar 🎧", completed: false, notes: "" },
-            { text: "Decidir cuándo revisar las redes sociales (si aplica) 📱", completed: false, notes: "" },
-            { text: "Elegir una pequeña acción para ayudar a alguien más 🤗", completed: false, notes: "" },
-            { text: "Decidir la hora de ir a dormir 😴", completed: false, notes: "" },
-            { text: "Elegir una afirmación positiva para el día ✨", completed: false, notes: "" },
-            { text: "Decidir un momento para agradecer 💖", completed: false, notes: "" }
-        ];
+    <div class="info-grid">
+      <div class="info-card">
+        <span class="info-icon">⏱️</span>
+        <div class="info-label">Tiempo diario</div>
+        <div class="info-value">Menos de 30 minutos</div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">🧭</span>
+        <div class="info-label">Lo que vas a lograr</div>
+        <div class="info-value">Decidir con calma y confianza</div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">📋</span>
+        <div class="info-label">Secciones incluidas</div>
+        <div class="info-value">5 módulos prácticos</div>
+      </div>
+      <div class="info-card">
+        <span class="info-icon">💾</span>
+        <div class="info-label">Tu progreso</div>
+        <div class="info-value">Se guarda automáticamente</div>
+      </div>
+    </div>
 
-        const quickDecisionStrategyData = [
-            { text: "Define la Decisión: ¿Qué necesitas decidir exactamente? Sé específico. 🎯", completed: false, reflection: "" },
-            { text: "Establece un Límite de Tiempo: Asigna 5-10 minutos para la decisión. ⏰", completed: false, reflection: "" },
-            { text: "Identifica 2-3 Opciones Clave: No busques la perfección, busca lo suficiente. 💡", completed: false, reflection: "" },
-            { text: "Lista Pros y Contras Rápidos: 1-2 puntos por opción, sin sobreanalizar. ✅❌", completed: false, reflection: "" },
-            { text: "Visualiza el Resultado: ¿Cómo te sentirías con cada opción en 24h? 🤔", completed: false, reflection: "" },
-            { text: "Confía en tu Intuición: ¿Qué te dice tu \"gut feeling\"? 💖", completed: false, reflection: "" },
-            { text: "Elige y Actúa: Toma una decisión y comprométete a probarla. 🚀", completed: false, reflection: "" },
-            { text: "Reflexiona Brevemente (Día 1): ¿Cómo te sientes con la decisión tomada? 📝", completed: false, reflection: "" },
-            { text: "Evalúa el Impacto (Día 2): ¿Fue la decisión tan crítica como parecía? 📊", completed: false, reflection: "" },
-            { text: "Ajusta si es Necesario (Día 3): ¿Hay algo que aprender o mejorar? 🔄", completed: false, reflection: "" },
-            { text: "Celebra las Pequeñas Victorias: Reconoce tu capacidad de decidir. 🎉", completed: false, reflection: "" },
-            { text: "Practica la Aceptación: No todas las decisiones serán perfectas, y está bien. 🧘", completed: false, reflection: "" },
-            { text: "Identifica Patrones: ¿Qué tipo de decisiones te agobian más? 🔍", completed: false, reflection: "" },
-            { text: "Prepara Respuestas Estándar: Para decisiones recurrentes, ten una opción por defecto. 🤖", completed: false, reflection: "" },
-            { text: "Recuerda tu \"Por Qué\": ¿Qué valores guían tus decisiones más importantes? ✨", completed: false, reflection: "" }
-        ];
+    <div class="card">
+      <div class="card-title">¿Qué es el Método CLARA?</div>
+      <div class="card-sub">El mecanismo central de este framework</div>
+      <p style="font-size: 1.08rem;color:var(--text-mid);line-height:1.7;margin-bottom:14px;">
+        El <strong>Método CLARA</strong> no es un truco motivacional. Es un protocolo de descarga cognitiva diseñado específicamente para personas que sienten su mente saturada. Funciona porque va directo a la raíz del problema: demasiadas opciones abiertas ocupando espacio mental al mismo tiempo.
+      </p>
+      <p style="font-size: 1.08rem;color:var(--text-mid);line-height:1.7;">
+        Con CLARA vas a aprender a <strong>Clarificar</strong> si una decisión realmente vale tu energía, <strong>Acotar</strong> las opciones a lo esencial, <strong>Actuar</strong> desde un lugar de suficiencia (no de perfección), <strong>Reflexionar</strong> brevemente para integrar lo que aprendiste, y <strong>Avanzar</strong> sin el peso del arrepentimiento.
+      </p>
+      <div class="divider"></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+        <span class="badge badge-green">✓ Basado en neurociencia cognitiva</span>
+        <span class="badge badge-gold">✓ Diseñado para la fatiga mental</span>
+        <span class="badge badge-green">✓ Resultados desde el día 1</span>
+      </div>
+    </div>
 
-        const audioQuotes = [
-            "La indecisión es a menudo peor que una mala decisión. Actúa." + " 🌟",
-            "Tu intuición es una brújula poderosa. Aprende a escucharla." + " 🧭",
-            "No busques la perfección, busca el progreso en cada elección." + " 🚀",
-            "Cada decisión es una oportunidad para aprender y crecer." + " 🌱",
-            "Libera el control sobre lo incontrolable y decide sobre lo que sí puedes." + " ✨",
-            "La claridad no siempre precede a la acción; a veces, la acción trae claridad." + " 💡",
-            "Respira hondo. La mejor decisión surge de una mente tranquila." + " 🧘‍♀️",
-            "Simplifica. Menos opciones a menudo significan mejores decisiones." + " ✂️",
-            "Confía en tu capacidad para adaptarte, sin importar el resultado." + " 💪",
-            "El miedo a equivocarse es el mayor obstáculo para decidir." + " 🚧",
-            "Pequeñas decisiones diarias construyen una vida de grandes logros." + " 🏗️",
-            "Date permiso para no saberlo todo antes de elegir." + " 💖",
-            "Tu energía es valiosa. No la gastes en la indecisión." + " 🔋",
-            "La vida es una serie de decisiones. Disfruta el proceso." + " 😊",
-            "Eres más fuerte y más sabio de lo que crees. Decide con esa verdad." + " 👑"
-        ];
+    <div class="card" style="border-left:3px solid var(--accent-light);">
+      <p style="font-size: 1.14rem;color:var(--text-mid);line-height:1.7;font-style:italic;">
+        "La parálisis decisional no es una falla de carácter. Es la señal de que tu sistema nervioso está protegiendo recursos. El objetivo no es decidir más rápido — es decidir con menos costo emocional."
+      </p>
+      <p style="font-size: 0.96rem;color:var(--text-soft);margin-top:8px;">— Principio base del Método CLARA</p>
+    </div>
+  </section>
 
-        const mentalFatigueExercisesData = [
-            { title: "Ejercicio de Respiración 4-7-8", description: "Inhala 4s, sostén 7s, exhala 8s. Repite 5 veces. 🌬️", response: "" },
-            { title: "Pausa de 5 Minutos", description: "Levántate, estírate, mira por la ventana. Desconecta. 🚶‍♀️", response: "" },
-            { title: "Diario de Pensamientos", description: "Escribe lo que te preocupa durante 5 minutos sin censura. ✍️", response: "" },
-            { title: "Escaneo Corporal Rápido", description: "Siente cada parte de tu cuerpo, liberando tensión. 🧘", response: "" },
-            { title: "Hidratación Consciente", description: "Bebe un vaso de agua lentamente, sintiendo cada sorbo. 💧", response: "" },
-            { title: "Regla de los 2 Minutos", description: "Si una tarea toma menos de 2 minutos, hazla ahora. ✅", response: "" },
-            { title: "Desconexión Digital", description: "Apaga notificaciones por 30 minutos. 📵", response: "" },
-            { title: "Mini-Meditación Guiada", description: "Busca un audio corto de meditación para principiantes. 🎧", response: "" },
-            { title: "Cambio de Entorno", description: "Ve a otra habitación o sal al aire libre por un momento. 🌳", response: "" },
-            { title: "Escucha Música Relajante", description: "Pon una melodía tranquila sin distracciones. 🎶", response: "" },
-            { title: "Estiramientos Suaves", description: "Libera la tensión de cuello, hombros y espalda. 🤸", response: "" },
-            { title: "Ejercicio de Gratitud", description: "Nombra 3 cosas por las que estás agradecido. 🙏", response: "" },
-            { title: "Priorización de Tareas (Matriz Eisenhower)", description: "Urgente/Importante. 📊", response: "" },
-            { title: "Visualización Positiva", description: "Imagina un lugar tranquilo y feliz por 2 minutos. 🏞️", response: "" },
-            { title: "Afirmación de Poder", description: "Repite \"Soy capaz y confío en mis decisiones.\" ✨", response: "" }
-        ];
+  <!-- ═══════ PESTAÑA 2: DECISIONES DIARIAS ═══════ -->
+  <section class="tab-panel" id="panel-decisiones">
+    <div class="section-header">
+      <span class="section-tag">Módulo 1</span>
+      <h2 class="section-title">Plantilla de Decisiones Diarias</h2>
+      <p class="section-desc">Cada día está lleno de pequeñas decisiones que, sumadas, drenan tu energía. Esta plantilla te ayuda a visibilizarlas, priorizarlas y soltarlas. Marcar una decisión como "hecha" es un acto de alivio, no solo de organización.</p>
+    </div>
 
-        let currentTab = localStorage.getItem('currentTab') || 'inicio';
-        let dailyDecisions = JSON.parse(localStorage.getItem('dailyDecisions')) || dailyDecisionsData;
-        let quickDecisionStrategy = JSON.parse(localStorage.getItem('quickDecisionStrategy')) || quickDecisionStrategyData;
-        let mentalFatigueExercises = JSON.parse(localStorage.getItem('mentalFatigueExercises')) || mentalFatigueExercisesData;
-        let audioPlayCount = parseInt(localStorage.getItem('audioPlayCount')) || 0;
+    <div class="card">
+      <div class="add-decision-row">
+        <input type="text" class="input-text" id="newDecisionInput" placeholder="Escribí una decisión que querés tomar hoy…" maxlength="120" onkeydown="if(event.key==='Enter')addCustomDecision()">
+        <button class="btn btn-primary" onclick="addCustomDecision()">+ Agregar</button>
+      </div>
+      <p style="font-size: 0.96rem;color:var(--text-soft);">Podés agregar tus propias decisiones o usar las sugeridas abajo.</p>
+    </div>
 
-        document.addEventListener('DOMContentLoaded', () => {
-            loadContent();
-            showTab(currentTab);
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.addEventListener('click', () => showTab(button.dataset.tab));
-            });
-            document.getElementById('play-audio-quote').addEventListener('click', playRandomAudioQuote);
-            updateGlobalProgress();
-        });
+    <div id="decisionsContainer"></div>
 
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.add('hidden');
-            });
-            document.getElementById(tabId).classList.remove("hidden");
+    <div class="card" style="margin-top:8px;">
+      <div class="card-title" style="font-size: 1.14rem;">📌 Decisiones de práctica — Situaciones comunes</div>
+      <div class="card-sub">Hacé clic en cualquiera para agregarla a tu lista</div>
+      <div id="suggestionsGrid" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+    </div>
+  </section>
 
-            // Specific actions for each tab when shown
-            if (tabId === 'progreso') {
-                updateGlobalProgress(); // Ensure progress is updated when viewing the progress tab
-            }
+  <!-- ═══════ PESTAÑA 3: ESTRATEGIA ═══════ -->
+  <section class="tab-panel" id="panel-estrategia">
+    <div class="section-header">
+      <span class="section-tag">Módulo 2</span>
+      <h2 class="section-title">Estrategia de Decisión Rápida</h2>
+      <p class="section-desc">El cambio real sucede paso a paso. Estos 15 pasos están ordenados para que los implementes progresivamente, sin sobrecargar tu sistema. Marcá cada uno cuando lo hayas aplicado y reflexioná brevemente — ese momento de reflexión es donde el aprendizaje se vuelve hábito.</p>
+    </div>
+    <div id="strategyContainer"></div>
+  </section>
 
+  <!-- ═══════ PESTAÑA 4: AUDIO ═══════ -->
+  <section class="tab-panel" id="panel-audio">
+    <div class="section-header">
+      <span class="section-tag">Módulo 3</span>
+      <h2 class="section-title">Mini-curso en Audio</h2>
+      <p class="section-desc">A veces la mente necesita escuchar, no leer. Estas frases y principios están diseñados para ser absorbidos en voz alta — leélos en voz alta para ti mismo, escuchálos con calma. Una frase bien recibida puede cambiar un día completo.</p>
+    </div>
 
-            document.querySelectorAll('.tab-button').forEach(button => {
-                button.classList.remove('active');
-            });
-            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+    <div class="audio-player" id="audioPlayer">
+      <span class="audio-icon" id="audioIcon">🎧</span>
+      <div class="audio-wave" id="audioWave">
+        <div class="wave-bar paused" id="w1"></div>
+        <div class="wave-bar paused" id="w2"></div>
+        <div class="wave-bar paused" id="w3"></div>
+        <div class="wave-bar paused" id="w4"></div>
+        <div class="wave-bar paused" id="w5"></div>
+        <div class="wave-bar paused" id="w6"></div>
+        <div class="wave-bar paused" id="w7"></div>
+        <div class="wave-bar paused" id="w8"></div>
+        <div class="wave-bar paused" id="w9"></div>
+      </div>
+      <p class="audio-frase" id="audioFrase">"Seleccioná una frase para comenzar tu sesión de audio."</p>
+      <p class="audio-autor" id="audioAutor">— Método CLARA</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+        <button class="btn" style="background:rgba(255,255,255,0.2);color:white;border:1.5px solid rgba(255,255,255,0.35);" onclick="playRandom()">🔀 Frase aleatoria</button>
+        <button class="btn" style="background:white;color:var(--accent);font-weight:700;" onclick="playNext()">▶ Siguiente →</button>
+        <button id="stopBtn" class="btn" style="background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.35);display:none;" onclick="stopTTS()">⏹ Detener</button>
+      </div>
+      <p class="listen-count" id="listenCount">Reproducidas: 0 veces en esta sesión</p>
+    </div>
 
-            currentTab = tabId;
-            localStorage.setItem('currentTab', currentTab);
-            updateGlobalProgress();
-        }
+    <div class="frases-list" id="frasesList"></div>
+  </section>
 
-        function loadContent() {
-            // Daily Decisions
-            const dailyDecisionsChecklist = document.getElementById('daily-decisions-checklist');
-            dailyDecisionsChecklist.innerHTML = '';
-            dailyDecisions.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.classList.add('checklist-item');
-                div.innerHTML = `
-                    <input type="checkbox" id="daily-decision-${index}" ${item.completed ? 'checked' : ''}>
-                    <label for="daily-decision-${index}">${item.text}</label>
-                    <textarea placeholder="Notas de reflexión..." data-index="${index}">${item.notes}</textarea>
-                `;
-                dailyDecisionsChecklist.appendChild(div);
+  <!-- ═══════ PESTAÑA 5: FATIGA MENTAL ═══════ -->
+  <section class="tab-panel" id="panel-fatiga">
+    <div class="section-header">
+      <span class="section-tag">Módulo 4</span>
+      <h2 class="section-title">Guía de Superación a la Fatiga Mental</h2>
+      <p class="section-desc">La fatiga mental no se cura con descanso físico. Necesita ejercicios específicos de descarga cognitiva. Estos 15 ejercicios están diseñados para que los hagas en 5 a 10 minutos — en el momento en que más los necesités. Escribir tus respuestas es clave: la externalización de pensamientos libera espacio mental inmediatamente.</p>
+    </div>
+    <div id="exercisesContainer"></div>
+  </section>
 
-                div.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
-                    dailyDecisions[index].completed = e.target.checked;
-                    saveProgress();
-                });
-                div.querySelector('textarea').addEventListener('input', (e) => {
-                    dailyDecisions[index].notes = e.target.value;
-                    saveProgress();
-                });
-            });
+  <!-- ═══════ PESTAÑA 6: PROGRESO ═══════ -->
+  <section class="tab-panel" id="panel-progreso">
+    <div class="section-header">
+      <span class="section-tag">Tu Avance</span>
+      <h2 class="section-title">Mi Progreso</h2>
+      <p class="section-desc">Cada marca, cada reflexión, cada decisión tomada es evidencia de que estás avanzando. Este panel te muestra de forma honesta dónde estás y te invita a celebrar lo que ya lograste.</p>
+    </div>
 
-            // Quick Decision Strategy
-            const quickDecisionStrategyDiv = document.getElementById('quick-decision-strategy');
-            quickDecisionStrategyDiv.innerHTML = '';
-            quickDecisionStrategy.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.classList.add('checklist-item');
-                div.innerHTML = `
-                    <input type="checkbox" id="strategy-step-${index}" ${item.completed ? 'checked' : ''}>
-                    <label for="strategy-step-${index}">${item.text}</label>
-                    <textarea placeholder="Reflexión diaria..." data-index="${index}">${item.reflection}</textarea>
-                `;
-                quickDecisionStrategyDiv.appendChild(div);
+    <div class="progress-stats">
+      <div class="stat-card">
+        <div class="stat-number" id="statDecisiones">0</div>
+        <div class="stat-label">Decisiones marcadas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statPasos">0</div>
+        <div class="stat-label">Pasos de estrategia</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="statEjercicios">0</div>
+        <div class="stat-label">Ejercicios completados</div>
+      </div>
+    </div>
 
-                div.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
-                    quickDecisionStrategy[index].completed = e.target.checked;
-                    saveProgress();
-                });
-                div.querySelector('textarea').addEventListener('input', (e) => {
-                    quickDecisionStrategy[index].reflection = e.target.value;
-                    saveProgress();
-                });
-            });
+    <div id="sectionProgress"></div>
 
-            // Mental Fatigue Exercises
-            const mentalFatigueExercisesDiv = document.getElementById('mental-fatigue-exercises');
-            mentalFatigueExercisesDiv.innerHTML = '';
-            mentalFatigueExercises.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.classList.add('exercise-item');
-                div.innerHTML = `
-                    <h3>${item.title}</h3>
-                    <p>${item.description}</p>
-                    <textarea placeholder="Tus respuestas o reflexiones..." data-index="${index}">${item.response}</textarea>
-                `;
-                mentalFatigueExercisesDiv.appendChild(div);
+    <div class="achievement" id="achievementBlock" style="display:none;">
+      <div style="font-size: 2.4rem;margin-bottom:12px;">🏆</div>
+      <h3>¡Progreso real registrado!</h3>
+      <p id="achievementText">Seguís construyendo el hábito de decidir con calma.</p>
+    </div>
 
-                div.querySelector('textarea').addEventListener('input', (e) => {
-                    mentalFatigueExercises[index].response = e.target.value;
-                    saveProgress();
-                });
-            });
+    <div class="card" style="margin-top:20px;">
+      <div class="card-title" style="font-size: 1.14rem;">💬 Tu reflexión de hoy</div>
+      <div class="card-sub">¿Cómo te sentís en este momento con tu toma de decisiones?</div>
+      <textarea class="input-text" id="dailyReflection" placeholder="Escribí aquí tus pensamientos…" style="width:100%;min-height:100px;resize:vertical;" oninput="saveDailyReflection()"></textarea>
+    </div>
 
-            // Audio Play Count
-            // No specific display for this, just tracking
-        }
+    <button class="reset-btn" onclick="confirmReset()">🗑 Reiniciar todo mi progreso</button>
+  </section>
 
-        function saveProgress() {
-            localStorage.setItem('dailyDecisions', JSON.stringify(dailyDecisions));
-            localStorage.setItem('quickDecisionStrategy', JSON.stringify(quickDecisionStrategy));
-            localStorage.setItem('mentalFatigueExercises', JSON.stringify(mentalFatigueExercises));
-            localStorage.setItem('audioPlayCount', audioPlayCount);
-            updateGlobalProgress();
-        }
+</main>
 
-        function playRandomAudioQuote() {
-            const quoteDisplay = document.getElementById('audio-quote-display');
-            const randomIndex = Math.floor(Math.random() * audioQuotes.length);
-            quoteDisplay.textContent = audioQuotes[randomIndex];
-            audioPlayCount++;
-            saveProgress();
-        }
+<div class="toast" id="toast"></div>
 
-        function updateGlobalProgress() {
-            let completedSections = 0;
+<script>
+// ══════════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════════
 
-            // Check 'diarias' tab completion: at least one item checked or noted
-            const dailyDecisionsProgress = dailyDecisions.some(item => item.completed || item.notes.trim() !== '');
-            if (dailyDecisionsProgress) completedSections++;
+const DECISIONS_SUGGESTIONS = [
+  { text: "¿Qué voy a desayunar mañana?", hint: "Paso 1: ¿importa mucho? Elegí una de 2 opciones." },
+  { text: "¿Qué ropa ponerse hoy?", hint: "Definí tu outfit la noche anterior para no gastar energía a la mañana." },
+  { text: "¿A quién le respondo primero?", hint: "Urgente primero, importante después, opcional cuando puedas." },
+  { text: "¿Hago ejercicio hoy o mañana?", hint: "La respuesta suficientemente buena: cualquier movimiento cuenta." },
+  { text: "¿Qué actividad hago en mi tiempo libre?", hint: "Elegí lo que te dé energía, no lo que 'debería' hacer." },
+  { text: "¿Acepto o rechazo esta invitación?", hint: "¿Tu primer instinto fue entusiasmo o alivio al pensar en no ir?" },
+  { text: "¿Cuándo hago las compras?", hint: "Fijá un día fijo por semana y eliminá esa decisión para siempre." },
+  { text: "¿Qué priorizo en mi lista de tareas?", hint: "La tarea más importante es la que más te cuesta empezar." },
+  { text: "¿Llamo o mando un mensaje?", hint: "Si necesitás tono emocional: llamá. Si es información: mensaje." },
+  { text: "¿Qué hago si me quedo con tiempo libre?", hint: "Tené 3 opciones de 'go-to' predecididas para no quedarte en blanco." },
+  { text: "¿Le digo que sí o que no a este pedido?", hint: "Si no es un sí claro, es un no. Tu energía es limitada." },
+  { text: "¿Qué veo esta noche?", hint: "Elegí antes de la noche para no perder 40 min en el scroll." },
+  { text: "¿Pago esto ahora o espero?", hint: "Regla: si puedo y debo, lo pago hoy." },
+  { text: "¿Continúo con este proyecto o lo pauso?", hint: "¿Qué elegiría si no me importara el qué dirán?" },
+  { text: "¿Descanso ahora o termino la tarea?", hint: "Un descanso de 5 min rinde más que empujar 30 min en piloto automático." }
+];
 
-            // Check 'estrategia' tab completion: at least one item checked or noted
-            const strategyProgress = quickDecisionStrategy.some(item => item.completed || item.reflection.trim() !== '');
-            if (strategyProgress) completedSections++;
+const STRATEGY_STEPS = [
+  {
+    title: "Identificá tus 3 decisiones más costosas del día",
+    body: "Durante 5 minutos, escribí las 3 decisiones que más energía te consumen normalmente. Solo al nombrarlas ya reduces su peso emocional.",
+    reflect: "¿Cuáles son esas 3 decisiones y por qué las sentís tan pesadas?"
+  },
+  {
+    title: "Aplicá la regla de los 2 minutos",
+    body: "Si una decisión puede tomarse en 2 minutos, tomala ahora. No la dejes 'para pensar después' — ese aplazamiento acumula carga mental.",
+    reflect: "¿Qué decisión postergás que podrías tomar ahora mismo en 2 minutos?"
+  },
+  {
+    title: "Creá tu 'menú cerrado' para decisiones repetidas",
+    body: "Para decisiones que se repiten (qué desayunar, qué ropa usar), definí un set fijo de opciones. Rotación entre 3-4 opciones predefinidas = cero decisión diaria.",
+    reflect: "¿Qué 3 decisiones repetidas podés convertir en menú cerrado esta semana?"
+  },
+  {
+    title: "Usá el criterio 'suficientemente bueno'",
+    body: "Preguntate: ¿Esta opción cumple el 80% de lo que necesito? Si sí: elegila. La perfección no existe. El perfeccionismo sí agota.",
+    reflect: "Describí una situación donde 'suficientemente bueno' habría sido la decisión correcta."
+  },
+  {
+    title: "Establecé un límite de tiempo por decisión",
+    body: "Pequeñas decisiones: 30 segundos. Medianas: 5 minutos. Grandes: 24 horas máximo. Ponete una alarma real. Cuando suena, elegís.",
+    reflect: "¿A qué tipo de decisión le podrías poner un límite de tiempo esta semana?"
+  },
+  {
+    title: "Externalizá con la técnica de los 3 pros",
+    body: "Cuando no podés decidir: escribí 3 razones para elegir opción A. Luego 3 para opción B. La opción que generó razones más fácilmente suele ser la correcta para vos.",
+    reflect: "Probá ahora con una decisión pendiente. ¿Qué revelaron tus 3 pros de cada opción?"
+  },
+  {
+    title: "Identificá cuándo decidís peor",
+    body: "La fatiga decisional tiene horarios. Registrá en qué momento del día tomás peores decisiones o te bloqueás más. Ese horario necesita protección: no agendes decisiones importantes ahí.",
+    reflect: "¿A qué hora del día sentís que tu capacidad decisional baja más? ¿Qué podrías mover de ese horario?"
+  },
+  {
+    title: "Practica el 'primero que funcione'",
+    body: "En decisiones de bajo impacto (qué comer, qué ver, qué ponerse), elegí la primera opción que aparezca y sea aceptable. Sin segundas vueltas. Sin scroll infinito.",
+    reflect: "¿En qué área de tu vida podrías aplicar 'primero que funcione' esta semana?"
+  },
+  {
+    title: "Reducí las opciones antes de decidir",
+    body: "Si tenés 10 opciones, eliminá 7 antes de evaluar. Demasiadas opciones = parálisis garantizada. Acotar no es rendirse — es una habilidad.",
+    reflect: "¿En qué decisión actual tenés demasiadas opciones abiertas? ¿Cuáles podés eliminar ya?"
+  },
+  {
+    title: "Usá tu cuerpo como brújula",
+    body: "Cerrá los ojos e imaginá que ya tomaste la decisión A. ¿Cómo se siente tu cuerpo? ¿Alivio o tensión? Probá con B. Tu sistema nervioso sabe antes que tu mente racional.",
+    reflect: "¿Qué decisión tenés pendiente donde podrías usar esta técnica hoy?"
+  },
+  {
+    title: "Creá rituales de transición",
+    body: "Un ritual de 3 minutos (respirar, tomar agua, caminar) entre bloques de actividad resetea el estado mental y reduce la acumulación de fatiga decisional.",
+    reflect: "¿Qué ritual simple podrías agregar entre tus bloques de trabajo o actividades del día?"
+  },
+  {
+    title: "Decidí en base a valores, no opciones",
+    body: "Cuando estés bloqueada, preguntate: ¿Cuál de estas opciones se alinea más con lo que más valoro ahora mismo? Los valores como brújula simplifican decisiones complejas.",
+    reflect: "¿Cuáles son tus 3 valores más importantes? ¿Cómo pueden guiar una decisión actual?"
+  },
+  {
+    title: "Autorizate a cambiar de opinión sin culpa",
+    body: "Una decisión tomada con la información disponible en ese momento siempre fue la mejor posible. Si cambias de idea después, eso no invalida la decisión anterior.",
+    reflect: "¿Hay alguna decisión pasada por la que todavía te reproches? ¿Qué información tenías entonces?"
+  },
+  {
+    title: "Diseñá tu 'zona de no-decisiones'",
+    body: "Elegí un momento del día (ej: las primeras 2 horas de la mañana) donde solo hacés actividades predefinidas. Sin decidir qué hacer. Ese tiempo protegido recarga la batería decisional.",
+    reflect: "¿Qué horario del día podría convertirse en tu zona de no-decisiones?"
+  },
+  {
+    title: "Celebrá cada decisión tomada, no el resultado",
+    body: "El músculo decisional se fortalece cuando celebrás el acto de decidir, independientemente del resultado. Cada decisión tomada es una victoria sobre la parálisis.",
+    reflect: "¿Qué decisión tomaste esta semana que merece ser celebrada, aunque el resultado fuera incierto?"
+  }
+];
 
-            // Check 'fatiga' tab completion: at least one exercise responded
-            const fatigueProgress = mentalFatigueExercises.some(item => item.response.trim() !== '');
-            if (fatigueProgress) completedSections++;
+const FRASES = [
+  { frase: "No necesitás la decisión perfecta. Necesitás una decisión suficiente que te libere para seguir avanzando.", autor: "Método CLARA" },
+  { frase: "Tu mente no está rota. Está protegiendo lo que le queda de energía. Ser compasiva con eso es el primer paso.", autor: "Principio de Descarga Cognitiva" },
+  { frase: "Cada vez que elegís 'suficientemente bueno' en lugar de 'perfecto', estás entrenando un sistema nervioso más libre.", autor: "Método CLARA" },
+  { frase: "El antídoto de la parálisis no es más información. Es menos opciones y más acción.", autor: "Principio de Simplificación" },
+  { frase: "No estás retrasada. Estás recuperando el ritmo que te corresponde. Eso lleva tiempo y merece respeto.", autor: "Método CLARA" },
+  { frase: "Decidir es un músculo. Lo que sentís hoy como esfuerzo, en 30 días va a sentirse como instinto.", autor: "Neurociencia Aplicada" },
+  { frase: "Tu cuerpo sabe antes que tu mente. Aprende a escuchar la diferencia entre tensión y alivio cuando imaginás cada opción.", autor: "Principio Somático" },
+  { frase: "Una decisión tomada con el 70% de la información necesaria llega a tiempo. Una decisión tomada con el 100% suele llegar tarde.", autor: "Método CLARA" },
+  { frase: "La carga mental invisible existe aunque nadie más la vea. Reconocerla ya la aligera.", autor: "Psicología Cognitiva" },
+  { frase: "No hay nada de malo en querer que alguien decida por vos. Eso es tu sistema nervioso pidiendo descanso.", autor: "Método CLARA" },
+  { frase: "El descanso verdadero no es no hacer nada. Es dejar de tener cosas abiertas en la mente.", autor: "Principio de Cierre" },
+  { frase: "Simplificar no es rendirse. Es elegir conscientemente a qué le vas a dar tu energía.", autor: "Método CLARA" },
+  { frase: "Cada pequeña decisión tomada hoy es un peso menos que arrastrar mañana.", autor: "Principio de Acumulación" },
+  { frase: "La confianza en tu propio juicio no vuelve de golpe. Vuelve decisión a decisión, imperfección tras imperfección.", autor: "Método CLARA" },
+  { frase: "Vivir liviana no es un lujo. Es la consecuencia natural de un sistema de decisiones que funciona para vos.", autor: "Método CLARA" }
+];
 
-            // Check 'audio' tab completion: at least one play
-            if (audioPlayCount > 0) completedSections++;
+const EXERCISES = [
+  {
+    emoji: "🫁",
+    title: "Respiración 4-7-8 para resetear",
+    time: "3 minutos",
+    instructions: "Cuando la mente está saturada, el cuerpo es el acceso más rápido al alivio. Este ejercicio activa el sistema nervioso parasimpático en menos de 3 minutos.",
+    steps: ["Inhalá por la nariz contando 4 segundos", "Retené el aire 7 segundos", "Exhalá lentamente por la boca 8 segundos", "Repetí 4 veces"]
+  },
+  {
+    emoji: "🧹",
+    title: "El vaciado mental (Brain Dump)",
+    time: "5 minutos",
+    instructions: "La mente retiene todo lo que no está escrito. Escribir libera ese espacio inmediatamente.",
+    steps: ["Ponete un temporizador de 5 minutos", "Escribí todo lo que está rondando tu mente SIN filtrar", "No edites ni organices, solo volcá", "Al terminar, marcá solo 1 cosa que vayas a atender hoy"]
+  },
+  {
+    emoji: "🏔️",
+    title: "Clasificación por importancia real",
+    time: "5 minutos",
+    instructions: "No todas las decisiones pesan igual, aunque tu mente las trate como urgentes a todas.",
+    steps: ["Anotá todas las decisiones que tenés pendientes", "Para cada una preguntate: ¿Importa en 5 años?", "Dividílas en: Urgente-Importante / Urgente / Importante / Ninguna", "Tomá solo las de la primera categoría esta semana"]
+  },
+  {
+    emoji: "🔇",
+    title: "5 minutos de silencio intencional",
+    time: "5 minutos",
+    instructions: "El ruido externo amplifica el ruido interno. El silencio intencional es diferente al aburrimiento — es una práctica activa de descarga.",
+    steps: ["Poné el celular boca abajo en silencio", "Cerrá los ojos o mirá un punto fijo", "Cuando aparezca un pensamiento, dejalo pasar sin engancharte", "Solo observá tu respiración durante 5 minutos"]
+  },
+  {
+    emoji: "✍️",
+    title: "La carta a tu yo descansada",
+    time: "7 minutos",
+    instructions: "Conectarte con cómo querés sentirte activa el sistema de orientación del cerebro, que ayuda a tomar mejores decisiones.",
+    steps: ["Imaginá que te sentís descansada, liviana, confiada", "Escribile una carta desde ese lugar a tu yo de hoy", "¿Qué te diría esa versión de vos sobre las decisiones de hoy?", "Cerrá la carta con una frase de aliento"]
+  },
+  {
+    emoji: "⚡",
+    title: "Técnica de la decisión instantánea",
+    time: "2 minutos",
+    instructions: "Entrenar decisiones rápidas en bajo riesgo fortalece el músculo decisional para cuando importa.",
+    steps: ["Pensá en una decisión de bajo impacto pendiente", "Poné un temporizador de 30 segundos", "Al sonar: elegí la primera opción aceptable", "Comprometete con esa elección sin reconsiderar"]
+  },
+  {
+    emoji: "🌊",
+    title: "Escaneo corporal de tensiones",
+    time: "5 minutos",
+    instructions: "La fatiga mental se acumula también en el cuerpo. Identificarla permite soltarla.",
+    steps: ["Recostáte o sentáte cómodamente", "Llevá la atención a tu cabeza y bajá lentamente hacia los pies", "Notá dónde sentís tensión, peso o malestar", "En cada zona, hacé una respiración profunda y soltá conscientemente"]
+  },
+  {
+    emoji: "🔍",
+    title: "Identificación del miedo real",
+    time: "5 minutos",
+    instructions: "Muchas veces la parálisis decisional esconde un miedo específico. Nombrarlo reduce su poder.",
+    steps: ["Elegí una decisión en la que estás bloqueada", "Preguntate: ¿Qué es lo peor que podría pasar si elijo mal?", "Luego: ¿Qué tan probable es que pase eso realmente?", "Finalmente: ¿Podrías manejarlo si pasara?"]
+  },
+  {
+    emoji: "🌿",
+    title: "Caminata de desconexión activa",
+    time: "10 minutos",
+    instructions: "El movimiento físico sin estímulo externo es una de las formas más efectivas de resetear la corteza prefrontal.",
+    steps: ["Salí a caminar sin celular o con el celular en silencio y guardado", "Ponete el objetivo de solo observar el entorno", "Sin pensar en tareas, sin planificar, sin resolver", "Al volver, anotá si tu mente está más clara"]
+  },
+  {
+    emoji: "🎯",
+    title: "El ejercicio de los 3 valores",
+    time: "5 minutos",
+    instructions: "Los valores son el filtro más poderoso para tomar decisiones alineadas sin desgastarte en análisis infinito.",
+    steps: ["Anotá tus 3 valores más importantes ahora mismo", "Mirá tu decisión más difícil del día", "Preguntate: ¿Cuál opción honra más esos valores?", "Esa suele ser tu respuesta correcta"]
+  },
+  {
+    emoji: "📵",
+    title: "Cierre de loops abiertos",
+    time: "10 minutos",
+    instructions: "Cada tarea sin terminar, mensaje sin responder, o decisión pendiente ocupa RAM mental. Cerrar loops libera espacio.",
+    steps: ["Anotá todos los 'pendientes' que tenés en mente", "Elegí 3 que puedas resolver en menos de 2 minutos", "Resolvelos ahora mismo", "Para los demás: agendálos o tomalos de tu lista y decidí si los soltás"]
+  },
+  {
+    emoji: "🌙",
+    title: "Ritual de cierre diario",
+    time: "5 minutos",
+    instructions: "La mente que no cierra el día sigue procesando por la noche. Este ritual le dice a tu cerebro que el día terminó.",
+    steps: ["A la misma hora cada día, cerrá el cuaderno o la computadora", "Anotá las 3 cosas que lograste hoy (aunque sean pequeñas)", "Escribí la 1 sola prioridad de mañana", "Hacé una acción física de cierre: poner el celular boca abajo, apagar la luz"]
+  },
+  {
+    emoji: "🪞",
+    title: "El espejo del auto-juicio",
+    time: "5 minutos",
+    instructions: "El auto-juicio por las decisiones tomadas drena energía futura. Este ejercicio interrumpe ese ciclo.",
+    steps: ["Pensá en una decisión pasada de la que te arrepentís", "Preguntate: ¿Qué información tenía en ese momento?", "Preguntate: ¿Qué habría elegido cualquier persona razonable con esa información?", "Escribí una frase de autocompasión que te dirías a una amiga en tu lugar"]
+  },
+  {
+    emoji: "🎨",
+    title: "Distracción intencional y creativa",
+    time: "10 minutos",
+    instructions: "La mente inconsciente resuelve problemas cuando la consciencia se distrae. Crear sin objetivo activa ese proceso.",
+    steps: ["Elegí algo completamente sin propósito: dibujar, colorear, cocinar algo simple", "Ponete el objetivo de hacerlo sin perfección, sin resultado", "Dejate absorber por la actividad durante 10 minutos", "Al terminar, anotá si apareció alguna claridad sobre tus decisiones pendientes"]
+  },
+  {
+    emoji: "💤",
+    title: "Micro-descanso de 5 minutos",
+    time: "5 minutos",
+    instructions: "El cerebro necesita períodos de no-procesamiento para consolidar y recuperar capacidad decisional. 5 minutos de descanso real rinden más que 30 minutos de esfuerzo con la batería baja.",
+    steps: ["Recostáte o reclinarte en un lugar tranquilo", "Cerrá los ojos sin intentar dormir", "Dejá que la mente divague sin engancharla con pensamientos", "Poné una alarma de 5 minutos y permitite ese tiempo sin culpa"]
+  }
+];
 
-            // 'Inicio' tab is considered complete if the user has interacted with any other section
-            if (completedSections > 0) completedSections++; 
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
+let state = {
+  decisions: [],        // [{id, text, hint, done, note, custom}]
+  strategyDone: {},     // {index: true}
+  strategyReflect: {},  // {index: text}
+  exerciseDone: {},     // {index: true}
+  exerciseResponse: {}, // {index: text}
+  listenCount: 0,
+  currentFrase: 0,
+  dailyReflection: '',
+  inicioVisited: false
+};
 
-            const overallCompletionPercentage = Math.round((completedSections / TOTAL_SECTIONS) * 100);
-            document.getElementById('global-progress-text').textContent = `Progreso General: ${overallCompletionPercentage}%`;
-            document.getElementById('global-progress-bar').style.width = `${overallCompletionPercentage}%`;
+function loadState() {
+  try {
+    const saved = localStorage.getItem('clara_state_v2');
+    if (saved) state = { ...state, ...JSON.parse(saved) };
+  } catch(e) {}
+}
 
-            // Update 'Mi Progreso' tab
-            document.getElementById('overall-completion').textContent = overallCompletionPercentage;
-            document.getElementById('daily-decisions-count').textContent = dailyDecisions.filter(item => item.completed).length;
-            document.getElementById('strategy-steps-completed').textContent = quickDecisionStrategy.filter(item => item.completed).length;
+function saveState() {
+  try { localStorage.setItem('clara_state_v2', JSON.stringify(state)); } catch(e) {}
+  updateProgress();
+}
 
-            let motivationMessage = "¡Cada paso cuenta!";
-            if (overallCompletionPercentage === 100) {
-                motivationMessage = "¡Felicidades! Has completado el framework. ¡Sigue aplicando tu Sistema Zen de Decisión!";
-            } else if (overallCompletionPercentage > 75) {
-                motivationMessage = "¡Estás casi ahí! Un último empujón para dominar tu claridad.";
-            } else if (overallCompletionPercentage > 50) {
-                motivationMessage = "¡Excelente progreso! Estás construyendo hábitos poderosos.";
-            } else if (overallCompletionPercentage > 25) {
-                motivationMessage = "¡Vas por buen camino! Cada decisión te acerca a la maestría.";
-            }
-            document.getElementById('motivation-message').textContent = motivationMessage;
-        }
+// ══════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════
+function goToTab(name) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+  if (name === 'progreso') renderProgress();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => goToTab(btn.dataset.tab));
+});
 
-        function saveProgress() {
-            localStorage.setItem('dailyDecisions', JSON.stringify(dailyDecisions));
-            localStorage.setItem('quickDecisionStrategy', JSON.stringify(quickDecisionStrategy));
-            localStorage.setItem('mentalFatigueExercises', JSON.stringify(mentalFatigueExercises));
-            localStorage.setItem('audioPlayCount', audioPlayCount);
-            updateGlobalProgress();
-        }
+// ══════════════════════════════════════════
+//  DECISIONS
+// ══════════════════════════════════════════
+function renderDecisions() {
+  const container = document.getElementById('decisionsContainer');
+  if (!state.decisions.length) {
+    container.innerHTML = '<div class="empty-state"><span>📋</span><p>Aún no agregaste decisiones. Usá las sugerencias de abajo o escribí la tuya.</p></div>';
+    return;
+  }
+  container.innerHTML = state.decisions.map((d, i) => `
+    <div class="decision-item ${d.done ? 'done' : ''}" id="di-${i}">
+      <div class="custom-check ${d.done ? 'checked' : ''}" onclick="toggleDecision(${i})">
+        ${d.done ? '✓' : ''}
+      </div>
+      <div class="decision-body">
+        <div class="decision-text">${escHtml(d.text)}</div>
+        ${d.hint ? `<div class="decision-hint">💡 ${escHtml(d.hint)}</div>` : ''}
+        <textarea class="decision-note" placeholder="Tu reflexión…" oninput="saveNote(${i}, this.value)">${escHtml(d.note || '')}</textarea>
+      </div>
+      <button class="delete-btn" onclick="deleteDecision(${i})" title="Eliminar">✕</button>
+    </div>
+  `).join('');
+}
 
-        function playRandomAudioQuote() {
-            const quoteDisplay = document.getElementById('audio-quote-display');
-            const randomIndex = Math.floor(Math.random() * audioQuotes.length);
-            quoteDisplay.textContent = audioQuotes[randomIndex];
-            audioPlayCount++;
-            saveProgress();
-        }
+function renderSuggestions() {
+  const grid = document.getElementById('suggestionsGrid');
+  const existing = state.decisions.map(d => d.text);
+  grid.innerHTML = DECISIONS_SUGGESTIONS
+    .filter(s => !existing.includes(s.text))
+    .map(s => `
+      <button onclick="addSuggestion('${escAttr(s.text)}','${escAttr(s.hint)}')"
+        style="padding:6px 13px;border:1.5px solid var(--border);border-radius:99px;background:var(--bg-card2);
+        font-size: 0.936rem;font-weight:500;cursor:pointer;color:var(--text-mid);transition:all 0.2s;font-family:var(--sans);"
+        onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'"
+        onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-mid)'">
+        + ${escHtml(s.text.substring(0,36))}
+      </button>
+    `).join('');
+}
 
-        function updateGlobalProgress() {
-            let completedSections = 0;
+function addCustomDecision() {
+  const input = document.getElementById('newDecisionInput');
+  const text = input.value.trim();
+  if (!text) return;
+  state.decisions.push({ id: Date.now(), text, hint: '', done: false, note: '', custom: true });
+  input.value = '';
+  saveState();
+  renderDecisions();
+  renderSuggestions();
+  showToast('✓ Decisión agregada');
+}
 
-            // Check 'diarias' tab completion
-            const completedDailyDecisions = dailyDecisions.filter(item => item.completed).length;
-            if (completedDailyDecisions > 0) completedSections++;
+function addSuggestion(text, hint) {
+  state.decisions.push({ id: Date.now(), text, hint, done: false, note: '', custom: false });
+  saveState();
+  renderDecisions();
+  renderSuggestions();
+  showToast('✓ Decisión agregada');
+}
 
-            // Check 'estrategia' tab completion
-            const completedStrategySteps = quickDecisionStrategy.filter(item => item.completed).length;
-            if (completedStrategySteps > 0) completedSections++;
+function toggleDecision(i) {
+  state.decisions[i].done = !state.decisions[i].done;
+  saveState();
+  renderDecisions();
+  renderSuggestions();
+  if (state.decisions[i].done) showToast('🌿 ¡Decisión completada!');
+}
 
-            // Check 'fatiga' tab completion (at least one exercise responded)
-            const respondedFatigueExercises = mentalFatigueExercises.filter(item => item.response.trim() !== '').length;
-            if (respondedFatigueExercises > 0) completedSections++;
+function saveNote(i, val) {
+  state.decisions[i].note = val;
+  saveState();
+}
 
-            // Check 'audio' tab completion (at least one play)
-            if (audioPlayCount > 0) completedSections++;
+function deleteDecision(i) {
+  state.decisions.splice(i, 1);
+  saveState();
+  renderDecisions();
+  renderSuggestions();
+}
 
-            // 'Inicio' tab is considered complete if the user clicks 'Comenzar' (which navigates to 'diarias')
-            // For simplicity, we'll consider it complete if any other section has progress.
-            if (completedSections > 0) completedSections++; // Count 'Inicio' as complete if user started
+// ══════════════════════════════════════════
+//  STRATEGY
+// ══════════════════════════════════════════
+function renderStrategy() {
+  const container = document.getElementById('strategyContainer');
+  container.innerHTML = STRATEGY_STEPS.map((s, i) => `
+    <div class="strategy-step ${state.strategyDone[i] ? 'done-step' : ''}" id="ss-${i}">
+      <div class="step-number">${state.strategyDone[i] ? '✓' : i + 1}</div>
+      <div class="step-content">
+        <div class="step-title-text">${escHtml(s.title)}</div>
+        <div class="step-body-text">${escHtml(s.body)}</div>
+        <div style="font-size: 0.96rem;color:var(--text-soft);margin-bottom:6px;font-weight:600;">✍️ ${escHtml(s.reflect)}</div>
+        <textarea class="step-reflect" placeholder="Tu reflexión personal…" oninput="saveStrategyReflect(${i}, this.value)">${escHtml(state.strategyReflect[i] || '')}</textarea>
+        <button class="mark-done-btn" onclick="toggleStrategyStep(${i})">
+          ${state.strategyDone[i] ? '✓ Completado' : '○ Marcar como hecho'}
+        </button>
+      </div>
+    </div>
+  `).join('');
+}
 
-            const overallCompletionPercentage = Math.round((completedSections / TOTAL_SECTIONS) * 100);
-            document.getElementById('global-progress-text').textContent = `Progreso General: ${overallCompletionPercentage}%`;
-            document.getElementById('global-progress-bar').style.width = `${overallCompletionPercentage}%`;
+function toggleStrategyStep(i) {
+  state.strategyDone[i] = !state.strategyDone[i];
+  saveState();
+  renderStrategy();
+  if (state.strategyDone[i]) showToast('☄️ Paso completado');
+}
 
-            // Update 'Mi Progreso' tab
-            document.getElementById('overall-completion').textContent = overallCompletionPercentage;
-            document.getElementById('daily-decisions-count').textContent = dailyDecisions.filter(item => item.completed).length;
-            document.getElementById('strategy-steps-completed').textContent = quickDecisionStrategy.filter(item => item.completed).length;
+function saveStrategyReflect(i, val) {
+  state.strategyReflect[i] = val;
+  saveState();
+}
 
-            let motivationMessage = "¡Cada paso cuenta!";
-            if (overallCompletionPercentage === 100) {
-                motivationMessage = "¡Felicidades! Has completado el framework. ¡Sigue aplicando tu Sistema Zen de Decisión!";
-            } else if (overallCompletionPercentage > 75) {
-                motivationMessage = "¡Estás casi ahí! Un último empujón para dominar tu claridad.";
-            } else if (overallCompletionPercentage > 50) {
-                motivationMessage = "¡Excelente progreso! Estás construyendo hábitos poderosos.";
-            } else if (overallCompletionPercentage > 25) {
-                motivationMessage = "¡Vas por buen camino! Cada decisión te acerca a la maestría.";
-            }
-            document.getElementById('motivation-message').textContent = motivationMessage;
-        }
-    </script>
+// ══════════════════════════════════════════
+//  AUDIO / FRASES — Web Speech API TTS
+// ══════════════════════════════════════════
+let isPlaying = false;
+let currentUtterance = null;
+
+function renderFrases() {
+  const list = document.getElementById('frasesList');
+  list.innerHTML = FRASES.map((f, i) => `
+    <div class="frase-card ${state.currentFrase === i ? 'active-frase' : ''}" onclick="playFrase(${i})">
+      <div class="frase-num">${i + 1}</div>
+      <div class="frase-text">${escHtml(f.frase)}</div>
+    </div>
+  `).join('');
+}
+
+function stopTTS() {
+  if (window.speechSynthesis) {
+    window.speechSynthesis.cancel();
+  }
+  isPlaying = false;
+  document.querySelectorAll('.wave-bar').forEach(b => b.classList.add('paused'));
+  const btn = document.getElementById('stopBtn');
+  if (btn) btn.style.display = 'none';
+}
+
+function playFrase(i) {
+  stopTTS();
+  state.currentFrase = i;
+  state.listenCount++;
+
+  document.getElementById('audioFrase').textContent = '"' + FRASES[i].frase + '"';
+  document.getElementById('audioAutor').textContent = '— ' + FRASES[i].autor;
+  document.getElementById('listenCount').textContent = 'Reproducidas: ' + state.listenCount + ' veces en esta sesión';
+  renderFrases();
+  saveState();
+
+  if (!window.speechSynthesis) {
+    showToast('⚠️ Tu navegador no soporta audio. Probá Chrome.');
+    return;
+  }
+
+  const utterance = new SpeechSynthesisUtterance(FRASES[i].frase);
+  utterance.lang = 'es-ES';
+  utterance.rate = 0.88;
+  utterance.pitch = 1.05;
+  utterance.volume = 1;
+
+  // Try to pick a Spanish voice
+  const voices = window.speechSynthesis.getVoices();
+  const esVoice = voices.find(v => v.lang.startsWith('es') && !v.name.includes('Google')) ||
+                  voices.find(v => v.lang.startsWith('es')) ||
+                  null;
+  if (esVoice) utterance.voice = esVoice;
+
+  utterance.onstart = () => {
+    isPlaying = true;
+    document.querySelectorAll('.wave-bar').forEach(b => b.classList.remove('paused'));
+    const btn = document.getElementById('stopBtn');
+    if (btn) btn.style.display = 'inline-flex';
+  };
+
+  utterance.onend = () => {
+    isPlaying = false;
+    document.querySelectorAll('.wave-bar').forEach(b => b.classList.add('paused'));
+    const btn = document.getElementById('stopBtn');
+    if (btn) btn.style.display = 'none';
+  };
+
+  utterance.onerror = () => {
+    isPlaying = false;
+    document.querySelectorAll('.wave-bar').forEach(b => b.classList.add('paused'));
+    showToast('⚠️ Error de audio. Intentá de nuevo.');
+  };
+
+  currentUtterance = utterance;
+  window.speechSynthesis.speak(utterance);
+}
+
+function playRandom() {
+  const i = Math.floor(Math.random() * FRASES.length);
+  playFrase(i);
+}
+
+function playNext() {
+  const next = (state.currentFrase + 1) % FRASES.length;
+  playFrase(next);
+}
+
+// Preload voices on interaction (required by some browsers)
+if (window.speechSynthesis) {
+  window.speechSynthesis.onvoiceschanged = () => { window.speechSynthesis.getVoices(); };
+}
+
+// ══════════════════════════════════════════
+//  EXERCISES
+// ══════════════════════════════════════════
+function renderExercises() {
+  const container = document.getElementById('exercisesContainer');
+  container.innerHTML = EXERCISES.map((ex, i) => `
+    <div class="exercise-card ${state.exerciseDone[i] ? 'completed' : ''}" id="ex-${i}">
+      <div class="exercise-header">
+        <div class="exercise-emoji">${ex.emoji}</div>
+        <div>
+          <div class="exercise-title">${escHtml(ex.title)}</div>
+          <div class="exercise-time">⏱ ${escHtml(ex.time)}</div>
+        </div>
+        ${state.exerciseDone[i] ? '<span class="badge badge-gold" style="margin-left:auto;">✓ Hecho</span>' : ''}
+      </div>
+      <p class="exercise-instructions">${escHtml(ex.instructions)}</p>
+      <ul class="exercise-steps">
+        ${ex.steps.map(s => `<li>${escHtml(s)}</li>`).join('')}
+      </ul>
+      <textarea class="exercise-response" placeholder="¿Cómo te sentiste? ¿Qué notaste? Escribí tu experiencia…" oninput="saveExerciseResponse(${i}, this.value)">${escHtml(state.exerciseResponse[i] || '')}</textarea>
+      <button class="btn ${state.exerciseDone[i] ? 'btn-secondary' : 'btn-accent2'}" onclick="toggleExercise(${i})">
+        ${state.exerciseDone[i] ? '↩ Desmarcar' : '✓ Completar ejercicio'}
+      </button>
+    </div>
+  `).join('');
+}
+
+function toggleExercise(i) {
+  state.exerciseDone[i] = !state.exerciseDone[i];
+  saveState();
+  renderExercises();
+  if (state.exerciseDone[i]) showToast('💡 Ejercicio completado');
+}
+
+function saveExerciseResponse(i, val) {
+  state.exerciseResponse[i] = val;
+  saveState();
+}
+
+// ══════════════════════════════════════════
+//  PROGRESS
+// ══════════════════════════════════════════
+function getStats() {
+  const decDone = state.decisions.filter(d => d.done).length;
+  const stratDone = Object.values(state.strategyDone).filter(Boolean).length;
+  const exDone = Object.values(state.exerciseDone).filter(Boolean).length;
+  return { decDone, stratDone, exDone };
+}
+
+function getGlobalPct() {
+  const { decDone, stratDone, exDone } = getStats();
+  // Weight: decisions 30%, strategy 40%, exercises 30%
+  const decMax = Math.max(state.decisions.length, 1);
+  const a = (decDone / decMax) * 0.30;
+  const b = (stratDone / 15) * 0.40;
+  const c = (exDone / 15) * 0.30;
+  return Math.round((a + b + c) * 100);
+}
+
+function updateProgress() {
+  const pct = getGlobalPct();
+  document.getElementById('globalFill').style.width = pct + '%';
+  document.getElementById('globalPct').textContent = pct + '%';
+
+  // Tab dots
+  const { decDone, stratDone, exDone } = getStats();
+  document.getElementById('dot-inicio').classList.toggle('done', true);
+  document.getElementById('dot-decisiones').classList.toggle('done', decDone > 0);
+  document.getElementById('dot-estrategia').classList.toggle('done', stratDone > 0);
+  document.getElementById('dot-audio').classList.toggle('done', state.listenCount > 0);
+  document.getElementById('dot-fatiga').classList.toggle('done', exDone > 0);
+  document.getElementById('dot-progreso').classList.toggle('done', pct > 0);
+}
+
+function renderProgress() {
+  const { decDone, stratDone, exDone } = getStats();
+  document.getElementById('statDecisiones').textContent = decDone;
+  document.getElementById('statPasos').textContent = stratDone;
+  document.getElementById('statEjercicios').textContent = exDone;
+
+  const decMax = Math.max(state.decisions.length, 1);
+  const sections = [
+    { icon: '📝', name: 'Decisiones Diarias', done: decDone, max: decMax },
+    { icon: '☄️', name: 'Estrategia de Decisión', done: stratDone, max: 15 },
+    { icon: '🎧', name: 'Mini-curso en Audio', done: state.listenCount, max: 15 },
+    { icon: '💡', name: 'Fatiga Mental', done: exDone, max: 15 },
+  ];
+
+  document.getElementById('sectionProgress').innerHTML = sections.map(s => {
+    const pct = Math.min(Math.round((s.done / s.max) * 100), 100);
+    return `
+      <div class="section-progress">
+        <div class="sp-icon">${s.icon}</div>
+        <div class="sp-body">
+          <div class="sp-name">${s.name} <span style="font-size: 0.96rem;color:var(--text-soft);font-weight:400;">${s.done}/${s.max}</span></div>
+          <div class="sp-bar"><div class="sp-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="sp-pct">${pct}%</div>
+      </div>
+    `;
+  }).join('');
+
+  const total = decDone + stratDone + exDone;
+  const ab = document.getElementById('achievementBlock');
+  const at = document.getElementById('achievementText');
+  if (total > 0) {
+    ab.style.display = 'block';
+    if (total >= 30) at.textContent = '¡Avance extraordinario! Tu compromiso con este proceso es real y poderoso.';
+    else if (total >= 15) at.textContent = 'Estás construyendo un hábito nuevo. Cada acción cuenta más de lo que crees.';
+    else at.textContent = 'El primer paso siempre es el más valioso. Ya estás avanzando.';
+  } else {
+    ab.style.display = 'none';
+  }
+
+  const savedReflection = state.dailyReflection || '';
+  const ta = document.getElementById('dailyReflection');
+  if (ta && !ta.dataset.init) { ta.value = savedReflection; ta.dataset.init = '1'; }
+}
+
+function saveDailyReflection() {
+  const ta = document.getElementById('dailyReflection');
+  if (ta) { state.dailyReflection = ta.value; saveState(); }
+}
+
+function confirmReset() {
+  if (confirm('¿Estás segura de que querés reiniciar todo tu progreso? Esta acción no se puede deshacer.')) {
+    localStorage.removeItem('clara_state_v2');
+    location.reload();
+  }
+}
+
+// ══════════════════════════════════════════
+//  UTILS
+// ══════════════════════════════════════════
+function escHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#39;');
+}
+
+function escAttr(str) {
+  return String(str || '').replace(/'/g,"\\'").replace(/"/g,'\\"');
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+function init() {
+  loadState();
+  renderDecisions();
+  renderSuggestions();
+  renderStrategy();
+  renderFrases();
+  renderExercises();
+  updateProgress();
+}
+
+init();
+</script>
 </body>
 </html>

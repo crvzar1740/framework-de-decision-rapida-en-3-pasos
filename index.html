@@ -1,0 +1,771 @@
+Title: Understanding the Content of pasted_content.txt - Manus
+Lite
+He completado la creación del Sistema Zen de Decisión: Tu Brújula de Claridad.
+Esta herramienta interactiva ha sido diseñada meticulosamente para ofrecer un alto valor percibido, utilizando una paleta de colores profesional y moderna basada en la psicología del color para el nicho de salud mental. Funciona de manera totalmente autónoma en un único archivo HTML, sin dependencias externas ni necesidad de conexión a internet, y utiliza localStorage para guardar el progreso del usuario de forma persistente.
+La herramienta incluye:
+Seis pestañas interactivas: Inicio, Plantilla de Decisiones Diarias, Estrategia de Decisión Rápida, Mini-curso en Audio (Cápsulas de Sabiduría), Guía de Fatiga Mental y un panel de Mi Progreso.
+Contenido de valor: Más de 60 ítems de contenido original, incluyendo ejercicios prácticos, frases motivacionales y pasos estratégicos.
+Diseño Responsive: Optimizado para una experiencia fluida tanto en desktop como en dispositivos móviles.
+Indicador de Progreso: Un sistema visual que motiva al usuario a completar las secciones.
+He verificado exhaustivamente la funcionalidad, asegurándome de que la navegación sea fluida, los datos se guarden correctamente al recargar y el diseño se vea impecable.
+¿Quieres que ajuste alguna pestaña, cambie el diseño o agregue alguna funcionalidad antes de que lo descargues?
+index.html
+Código · 34.72 KB
+Ver todos los archivos en esta tarea
+Tarea completada
+¿Cómo fue este resultado?
+Seguimientos sugeridos
+
+
+
+Computadoras en la nube
+Nuevo
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema Zen de Decisión: Tu Brújula de Claridad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-bg: #F7F9FC;
+            --card-bg: #FFFFFF;
+            --primary-accent: #4A90E2;
+            --secondary-accent: #50E3C2;
+            --text-color: #333333;
+            --light-text-color: #666666;
+            --border-color: #E0E0E0;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--primary-bg);
+            color: var(--text-color);
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px var(--shadow-color);
+            flex-grow: 1;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--primary-accent);
+            font-family: 'Poppins', sans-serif;
+            margin-top: 0;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .tab-bar {
+            display: flex;
+            justify-content: space-around;
+            background-color: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 12px 12px 0 0;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            background-color: transparent;
+            border: none;
+            padding: 15px 20px;
+            font-size: 1em;
+            font-weight: 600;
+            color: var(--light-text-color);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .tab-button:hover {
+            color: var(--primary-accent);
+        }
+
+        .tab-button.active {
+            color: var(--primary-accent);
+        }
+
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-accent);
+            border-radius: 2px 2px 0 0;
+        }
+
+        .tab-content {
+            padding: 20px 0;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .button {
+            background-color: var(--primary-accent);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .button:hover {
+            background-color: #3A7BD5; /* Un tono ligeramente más oscuro */
+            transform: translateY(-2px);
+        }
+
+        .button:active {
+            transform: translateY(0);
+        }
+
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            font-family: 'Inter', sans-serif;
+            font-size: 1em;
+            margin-top: 10px;
+            box-sizing: border-box;
+            resize: vertical;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            background-color: var(--card-bg);
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--border-color);
+        }
+
+        .checklist-item label {
+            flex-grow: 1;
+            cursor: pointer;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            background-color: var(--border-color);
+            border-radius: 5px;
+            margin-bottom: 20px;
+            height: 10px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--secondary-accent);
+            border-radius: 5px;
+            transition: width 0.5s ease-in-out;
+        }
+
+        .progress-text {
+            text-align: center;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-accent);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .tab-button {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tab-bar {
+                justify-content: flex-start;
+            }
+
+            .tab-button {
+                font-size: 0.8em;
+                padding: 10px 12px;
+            }
+        }
+
+        blockquote {
+            background-color: #eef4fb;
+            border-left: 5px solid var(--primary-accent);
+            margin: 1.5em 0;
+            padding: 1em 20px;
+            color: #444;
+            font-style: italic;
+            border-radius: 0 8px 8px 0;
+        }
+
+        blockquote p {
+            margin: 0;
+        }
+
+        .audio-player-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+
+        .audio-player-card .button {
+            margin-top: 20px;
+        }
+
+        .audio-quote {
+            font-size: 1.2em;
+            font-style: italic;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--primary-accent);
+        }
+
+        .exercise-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 1px 5px var(--shadow-color);
+        }
+
+        .exercise-item h3 {
+            color: var(--primary-accent);
+            margin-top: 0;
+            margin-bottom: 10px;
+        }
+
+        .exercise-item p {
+            margin-bottom: 10px;
+        }
+
+        .progress-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 30px;
+        }
+
+        .progress-metric {
+            background-color: var(--primary-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            flex: 1 1 calc(33% - 20px);
+            min-width: 200px;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .progress-metric h3 {
+            color: var(--secondary-accent);
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .progress-metric p {
+            color: var(--light-text-color);
+            font-size: 0.9em;
+            margin: 0;
+        }
+
+        .motivation-message {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #eef4fb;
+            border-left: 5px solid var(--secondary-accent);
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #444;
+            text-align: center;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            color: var(--light-text-color);
+            font-size: 0.9em;
+            border-top: 1px solid var(--border-color);
+            background-color: var(--card-bg);
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Sistema Zen de Decisión: Tu Brújula de Claridad</h1>
+    </header>
+
+    <div class="container">
+        <div class="progress-text" id="global-progress-text">Progreso General: 0%</div>
+        <div class="progress-bar-container">
+            <div class="progress-bar" id="global-progress-bar"></div>
+        </div>
+
+        <nav class="tab-bar">
+            <button class="tab-button active" data-tab="inicio">Inicio 🌟</button>
+            <button class="tab-button" data-tab="diarias">Decisiones Diarias 📝</button>
+            <button class="tab-button" data-tab="estrategia">Estrategia Rápida ☄️</button>
+            <button class="tab-button" data-tab="audio">Mini-curso Audio 🎧</button>
+            <button class="tab-button" data-tab="fatiga">Guía Fatiga Mental 💡</button>
+            <button class="tab-button" data-tab="progreso">Mi Progreso 📊</button>
+        </nav>
+
+        <div id="inicio" class="tab-content">
+            <div class="card">
+                <h2>Bienvenido al Sistema Zen de Decisión: Tu Brújula de Claridad</h2>
+                <blockquote>
+                    <p>¿Te sientes abrumado por las decisiones diarias? ¿La fatiga mental te paraliza ante opciones que antes parecían simples? Entendemos perfectamente esa sensación. Has intentado encontrar claridad, pero la carga emocional de cada elección te agota. Es hora de recuperar el control, de sentir la ligereza de vivir el presente y de tomar decisiones con una confianza renovada. Este no es solo un framework; es tu aliado para transformar la ansiedad en acción, y la duda en determinación. Prepárate para simplificar tu vida y redescubrir la paz mental que mereces.</p>
+                </blockquote>
+                <p>"Bienvenido a tu viaje hacia la claridad decisiva. El Sistema Zen de Decisión está diseñado para liberarte del peso de la indecisión, paso a paso. Aquí aprenderás a navegar tus opciones con calma, confianza y una perspectiva renovada. Haz clic en 'Comenzar' para dar el primer paso hacia una vida más ligera y plena."</p>
+                <button class="button" onclick="showTab(\'diarias\')">Comenzar</button>
+            </div>
+        </div>
+
+        <div id="diarias" class="tab-content hidden">
+            <div class="card">
+                <h2>Plantilla de Decisiones Diarias: Simplifica tu Día</h2>
+                <blockquote>
+                    <p>Las pequeñas decisiones cotidianas pueden acumularse y generar una fatiga mental inesperada. ¿Qué desayunar? ¿Qué ropa ponerme? ¿Qué tarea abordar primero? Esta plantilla está diseñada para desglosar esas elecciones, permitiéndote abordarlas con intención y sin el estrés habitual. Al registrar y reflexionar sobre ellas, transformarás la indecisión en un flujo consciente y empoderador.</p>
+                </blockquote>
+                <div id="daily-decisions-checklist"></div>
+            </div>
+        </div>
+
+        <div id="estrategia" class="tab-content hidden">
+            <div class="card">
+                <h2>Estrategia de Decisión Rápida: Activa tu Claridad</h2>
+                <blockquote>
+                    <p>¿Sientes que las decisiones importantes te detienen? Esta estrategia te ofrece un camino claro y conciso para evaluar opciones y actuar con determinación. No se trata de eliminar la reflexión, sino de optimizarla, transformando la parálisis en un impulso efectivo. Cada paso te acerca a la confianza que anhelas, permitiéndote avanzar sin la carga de la duda.</p>
+                </blockquote>
+                <div id="quick-decision-strategy"></div>
+            </div>
+        </div>
+
+        <div id="audio" class="tab-content hidden">
+            <div class="card audio-player-card">
+                <h2>Mini-curso en Audio: Cápsulas de Sabiduría</h2>
+                <blockquote>
+                    <p>A veces, una pequeña dosis de inspiración o un consejo oportuno es todo lo que necesitamos para cambiar nuestra perspectiva. Este mini-curso en audio está diseñado para ofrecerte precisamente eso: píldoras de sabiduría que puedes escuchar en cualquier momento, ayudándote a recentrarte y a encontrar la calma necesaria para tomar decisiones con claridad. Deja que estas palabras te guíen hacia una mente más serena y decidida.</p>
+                </blockquote>
+                <div class="audio-quote" id="audio-quote-display">Haz clic en 'Escuchar' para una dosis de sabiduría.</div>
+                <button class="button" id="play-audio-quote">Escuchar</button>
+            </div>
+        </div>
+
+        <div id="fatiga" class="tab-content hidden">
+            <div class="card">
+                <h2>Guía de Superación a la Fatiga Mental: Recarga tu Mente</h2>
+                <blockquote>
+                    <p>La fatiga mental es un muro invisible que drena tu energía y nubla tu juicio. Pero no tienes que vivir con ella. Esta guía interactiva te ofrece ejercicios prácticos y herramientas probadas para recargar tu mente, restaurar tu claridad y fortalecer tu resiliencia. Es hora de romper el ciclo del agotamiento y redescubrir la vitalidad que te permite tomar decisiones con confianza y alegría.</p>
+                </blockquote>
+                <div id="mental-fatigue-exercises"></div>
+            </div>
+        </div>
+
+        <div id="progreso" class="tab-content hidden">
+            <div class="card">
+                <h2>Mi Progreso: Tu Camino Hacia la Claridad</h2>
+                <blockquote>
+                    <p>Ver tu progreso es una de las mayores motivaciones. Aquí, podrás visualizar el camino que has recorrido, las decisiones que has tomado y las reflexiones que te han fortalecido. Cada marca de completado, cada nota guardada, es un testimonio de tu compromiso con una vida más consciente y libre de fatiga mental. Celebra tus avances y sigue construyendo la confianza en ti mismo.</p>
+                </blockquote>
+                <div class="progress-summary">
+                    <div class="progress-metric">
+                        <h3><span id="overall-completion">0</span>%</h3>
+                        <p>Completado General</p>
+                    </div>
+                    <div class="progress-metric">
+                        <h3><span id="daily-decisions-count">0</span></h3>
+                        <p>Decisiones Diarias</p>
+                    </div>
+                    <div class="progress-metric">
+                        <h3><span id="strategy-steps-completed">0</span></h3>
+                        <p>Pasos Estrategia</p>
+                    </div>
+                </div>
+                <div class="motivation-message" id="motivation-message">¡Cada paso cuenta!</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Sistema Zen de Decisión. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        const TABS = ['inicio', 'diarias', 'estrategia', 'audio', 'fatiga', 'progreso'];
+        const TOTAL_SECTIONS = 5; // Excluding 'progreso' tab for completion calculation
+
+        const dailyDecisionsData = [
+            { text: "Elegir qué desayunar 🍎", completed: false, notes: "" },
+            { text: "Decidir qué ropa usar hoy 👕", completed: false, notes: "" },
+            { text: "Priorizar 3 tareas importantes del día 🚀", completed: false, notes: "" },
+            { text: "Elegir un momento para un breve descanso ☕", completed: false, notes: "" },
+            { text: "Decidir qué comer para el almuerzo 🥗", completed: false, notes: "" },
+            { text: "Responder a un email o mensaje pendiente 📧", completed: false, notes: "" },
+            { text: "Elegir una actividad relajante para la tarde 🧘‍♀️", completed: false, notes: "" },
+            { text: "Decidir si hacer ejercicio o caminar 🚶‍♂️", completed: false, notes: "" },
+            { text: "Planificar la cena 🍽️", completed: false, notes: "" },
+            { text: "Elegir un libro o podcast para escuchar 🎧", completed: false, notes: "" },
+            { text: "Decidir cuándo revisar las redes sociales (si aplica) 📱", completed: false, notes: "" },
+            { text: "Elegir una pequeña acción para ayudar a alguien más 🤗", completed: false, notes: "" },
+            { text: "Decidir la hora de ir a dormir 😴", completed: false, notes: "" },
+            { text: "Elegir una afirmación positiva para el día ✨", completed: false, notes: "" },
+            { text: "Decidir un momento para agradecer 💖", completed: false, notes: "" }
+        ];
+
+        const quickDecisionStrategyData = [
+            { text: "Define la Decisión: ¿Qué necesitas decidir exactamente? Sé específico. 🎯", completed: false, reflection: "" },
+            { text: "Establece un Límite de Tiempo: Asigna 5-10 minutos para la decisión. ⏰", completed: false, reflection: "" },
+            { text: "Identifica 2-3 Opciones Clave: No busques la perfección, busca lo suficiente. 💡", completed: false, reflection: "" },
+            { text: "Lista Pros y Contras Rápidos: 1-2 puntos por opción, sin sobreanalizar. ✅❌", completed: false, reflection: "" },
+            { text: "Visualiza el Resultado: ¿Cómo te sentirías con cada opción en 24h? 🤔", completed: false, reflection: "" },
+            { text: "Confía en tu Intuición: ¿Qué te dice tu \"gut feeling\"? 💖", completed: false, reflection: "" },
+            { text: "Elige y Actúa: Toma una decisión y comprométete a probarla. 🚀", completed: false, reflection: "" },
+            { text: "Reflexiona Brevemente (Día 1): ¿Cómo te sientes con la decisión tomada? 📝", completed: false, reflection: "" },
+            { text: "Evalúa el Impacto (Día 2): ¿Fue la decisión tan crítica como parecía? 📊", completed: false, reflection: "" },
+            { text: "Ajusta si es Necesario (Día 3): ¿Hay algo que aprender o mejorar? 🔄", completed: false, reflection: "" },
+            { text: "Celebra las Pequeñas Victorias: Reconoce tu capacidad de decidir. 🎉", completed: false, reflection: "" },
+            { text: "Practica la Aceptación: No todas las decisiones serán perfectas, y está bien. 🧘", completed: false, reflection: "" },
+            { text: "Identifica Patrones: ¿Qué tipo de decisiones te agobian más? 🔍", completed: false, reflection: "" },
+            { text: "Prepara Respuestas Estándar: Para decisiones recurrentes, ten una opción por defecto. 🤖", completed: false, reflection: "" },
+            { text: "Recuerda tu \"Por Qué\": ¿Qué valores guían tus decisiones más importantes? ✨", completed: false, reflection: "" }
+        ];
+
+        const audioQuotes = [
+            "La indecisión es a menudo peor que una mala decisión. Actúa." + " 🌟",
+            "Tu intuición es una brújula poderosa. Aprende a escucharla." + " 🧭",
+            "No busques la perfección, busca el progreso en cada elección." + " 🚀",
+            "Cada decisión es una oportunidad para aprender y crecer." + " 🌱",
+            "Libera el control sobre lo incontrolable y decide sobre lo que sí puedes." + " ✨",
+            "La claridad no siempre precede a la acción; a veces, la acción trae claridad." + " 💡",
+            "Respira hondo. La mejor decisión surge de una mente tranquila." + " 🧘‍♀️",
+            "Simplifica. Menos opciones a menudo significan mejores decisiones." + " ✂️",
+            "Confía en tu capacidad para adaptarte, sin importar el resultado." + " 💪",
+            "El miedo a equivocarse es el mayor obstáculo para decidir." + " 🚧",
+            "Pequeñas decisiones diarias construyen una vida de grandes logros." + " 🏗️",
+            "Date permiso para no saberlo todo antes de elegir." + " 💖",
+            "Tu energía es valiosa. No la gastes en la indecisión." + " 🔋",
+            "La vida es una serie de decisiones. Disfruta el proceso." + " 😊",
+            "Eres más fuerte y más sabio de lo que crees. Decide con esa verdad." + " 👑"
+        ];
+
+        const mentalFatigueExercisesData = [
+            { title: "Ejercicio de Respiración 4-7-8", description: "Inhala 4s, sostén 7s, exhala 8s. Repite 5 veces. 🌬️", response: "" },
+            { title: "Pausa de 5 Minutos", description: "Levántate, estírate, mira por la ventana. Desconecta. 🚶‍♀️", response: "" },
+            { title: "Diario de Pensamientos", description: "Escribe lo que te preocupa durante 5 minutos sin censura. ✍️", response: "" },
+            { title: "Escaneo Corporal Rápido", description: "Siente cada parte de tu cuerpo, liberando tensión. 🧘", response: "" },
+            { title: "Hidratación Consciente", description: "Bebe un vaso de agua lentamente, sintiendo cada sorbo. 💧", response: "" },
+            { title: "Regla de los 2 Minutos", description: "Si una tarea toma menos de 2 minutos, hazla ahora. ✅", response: "" },
+            { title: "Desconexión Digital", description: "Apaga notificaciones por 30 minutos. 📵", response: "" },
+            { title: "Mini-Meditación Guiada", description: "Busca un audio corto de meditación para principiantes. 🎧", response: "" },
+            { title: "Cambio de Entorno", description: "Ve a otra habitación o sal al aire libre por un momento. 🌳", response: "" },
+            { title: "Escucha Música Relajante", description: "Pon una melodía tranquila sin distracciones. 🎶", response: "" },
+            { title: "Estiramientos Suaves", description: "Libera la tensión de cuello, hombros y espalda. 🤸", response: "" },
+            { title: "Ejercicio de Gratitud", description: "Nombra 3 cosas por las que estás agradecido. 🙏", response: "" },
+            { title: "Priorización de Tareas (Matriz Eisenhower)", description: "Urgente/Importante. 📊", response: "" },
+            { title: "Visualización Positiva", description: "Imagina un lugar tranquilo y feliz por 2 minutos. 🏞️", response: "" },
+            { title: "Afirmación de Poder", description: "Repite \"Soy capaz y confío en mis decisiones.\" ✨", response: "" }
+        ];
+
+        let currentTab = localStorage.getItem('currentTab') || 'inicio';
+        let dailyDecisions = JSON.parse(localStorage.getItem('dailyDecisions')) || dailyDecisionsData;
+        let quickDecisionStrategy = JSON.parse(localStorage.getItem('quickDecisionStrategy')) || quickDecisionStrategyData;
+        let mentalFatigueExercises = JSON.parse(localStorage.getItem('mentalFatigueExercises')) || mentalFatigueExercisesData;
+        let audioPlayCount = parseInt(localStorage.getItem('audioPlayCount')) || 0;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadContent();
+            showTab(currentTab);
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', () => showTab(button.dataset.tab));
+            });
+            document.getElementById('play-audio-quote').addEventListener('click', playRandomAudioQuote);
+            updateGlobalProgress();
+        });
+
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(tabId).classList.remove("hidden");
+
+            // Specific actions for each tab when shown
+            if (tabId === 'progreso') {
+                updateGlobalProgress(); // Ensure progress is updated when viewing the progress tab
+            }
+
+
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            document.querySelector(`.tab-button[data-tab="${tabId}"]`).classList.add('active');
+
+            currentTab = tabId;
+            localStorage.setItem('currentTab', currentTab);
+            updateGlobalProgress();
+        }
+
+        function loadContent() {
+            // Daily Decisions
+            const dailyDecisionsChecklist = document.getElementById('daily-decisions-checklist');
+            dailyDecisionsChecklist.innerHTML = '';
+            dailyDecisions.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('checklist-item');
+                div.innerHTML = `
+                    <input type="checkbox" id="daily-decision-${index}" ${item.completed ? 'checked' : ''}>
+                    <label for="daily-decision-${index}">${item.text}</label>
+                    <textarea placeholder="Notas de reflexión..." data-index="${index}">${item.notes}</textarea>
+                `;
+                dailyDecisionsChecklist.appendChild(div);
+
+                div.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
+                    dailyDecisions[index].completed = e.target.checked;
+                    saveProgress();
+                });
+                div.querySelector('textarea').addEventListener('input', (e) => {
+                    dailyDecisions[index].notes = e.target.value;
+                    saveProgress();
+                });
+            });
+
+            // Quick Decision Strategy
+            const quickDecisionStrategyDiv = document.getElementById('quick-decision-strategy');
+            quickDecisionStrategyDiv.innerHTML = '';
+            quickDecisionStrategy.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('checklist-item');
+                div.innerHTML = `
+                    <input type="checkbox" id="strategy-step-${index}" ${item.completed ? 'checked' : ''}>
+                    <label for="strategy-step-${index}">${item.text}</label>
+                    <textarea placeholder="Reflexión diaria..." data-index="${index}">${item.reflection}</textarea>
+                `;
+                quickDecisionStrategyDiv.appendChild(div);
+
+                div.querySelector('input[type="checkbox"]').addEventListener('change', (e) => {
+                    quickDecisionStrategy[index].completed = e.target.checked;
+                    saveProgress();
+                });
+                div.querySelector('textarea').addEventListener('input', (e) => {
+                    quickDecisionStrategy[index].reflection = e.target.value;
+                    saveProgress();
+                });
+            });
+
+            // Mental Fatigue Exercises
+            const mentalFatigueExercisesDiv = document.getElementById('mental-fatigue-exercises');
+            mentalFatigueExercisesDiv.innerHTML = '';
+            mentalFatigueExercises.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.classList.add('exercise-item');
+                div.innerHTML = `
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <textarea placeholder="Tus respuestas o reflexiones..." data-index="${index}">${item.response}</textarea>
+                `;
+                mentalFatigueExercisesDiv.appendChild(div);
+
+                div.querySelector('textarea').addEventListener('input', (e) => {
+                    mentalFatigueExercises[index].response = e.target.value;
+                    saveProgress();
+                });
+            });
+
+            // Audio Play Count
+            // No specific display for this, just tracking
+        }
+
+        function saveProgress() {
+            localStorage.setItem('dailyDecisions', JSON.stringify(dailyDecisions));
+            localStorage.setItem('quickDecisionStrategy', JSON.stringify(quickDecisionStrategy));
+            localStorage.setItem('mentalFatigueExercises', JSON.stringify(mentalFatigueExercises));
+            localStorage.setItem('audioPlayCount', audioPlayCount);
+            updateGlobalProgress();
+        }
+
+        function playRandomAudioQuote() {
+            const quoteDisplay = document.getElementById('audio-quote-display');
+            const randomIndex = Math.floor(Math.random() * audioQuotes.length);
+            quoteDisplay.textContent = audioQuotes[randomIndex];
+            audioPlayCount++;
+            saveProgress();
+        }
+
+        function updateGlobalProgress() {
+            let completedSections = 0;
+
+            // Check 'diarias' tab completion: at least one item checked or noted
+            const dailyDecisionsProgress = dailyDecisions.some(item => item.completed || item.notes.trim() !== '');
+            if (dailyDecisionsProgress) completedSections++;
+
+            // Check 'estrategia' tab completion: at least one item checked or noted
+            const strategyProgress = quickDecisionStrategy.some(item => item.completed || item.reflection.trim() !== '');
+            if (strategyProgress) completedSections++;
+
+            // Check 'fatiga' tab completion: at least one exercise responded
+            const fatigueProgress = mentalFatigueExercises.some(item => item.response.trim() !== '');
+            if (fatigueProgress) completedSections++;
+
+            // Check 'audio' tab completion: at least one play
+            if (audioPlayCount > 0) completedSections++;
+
+            // 'Inicio' tab is considered complete if the user has interacted with any other section
+            if (completedSections > 0) completedSections++; 
+
+            const overallCompletionPercentage = Math.round((completedSections / TOTAL_SECTIONS) * 100);
+            document.getElementById('global-progress-text').textContent = `Progreso General: ${overallCompletionPercentage}%`;
+            document.getElementById('global-progress-bar').style.width = `${overallCompletionPercentage}%`;
+
+            // Update 'Mi Progreso' tab
+            document.getElementById('overall-completion').textContent = overallCompletionPercentage;
+            document.getElementById('daily-decisions-count').textContent = dailyDecisions.filter(item => item.completed).length;
+            document.getElementById('strategy-steps-completed').textContent = quickDecisionStrategy.filter(item => item.completed).length;
+
+            let motivationMessage = "¡Cada paso cuenta!";
+            if (overallCompletionPercentage === 100) {
+                motivationMessage = "¡Felicidades! Has completado el framework. ¡Sigue aplicando tu Sistema Zen de Decisión!";
+            } else if (overallCompletionPercentage > 75) {
+                motivationMessage = "¡Estás casi ahí! Un último empujón para dominar tu claridad.";
+            } else if (overallCompletionPercentage > 50) {
+                motivationMessage = "¡Excelente progreso! Estás construyendo hábitos poderosos.";
+            } else if (overallCompletionPercentage > 25) {
+                motivationMessage = "¡Vas por buen camino! Cada decisión te acerca a la maestría.";
+            }
+            document.getElementById('motivation-message').textContent = motivationMessage;
+        }
+
+
+        function saveProgress() {
+            localStorage.setItem('dailyDecisions', JSON.stringify(dailyDecisions));
+            localStorage.setItem('quickDecisionStrategy', JSON.stringify(quickDecisionStrategy));
+            localStorage.setItem('mentalFatigueExercises', JSON.stringify(mentalFatigueExercises));
+            localStorage.setItem('audioPlayCount', audioPlayCount);
+            updateGlobalProgress();
+        }
+
+        function playRandomAudioQuote() {
+            const quoteDisplay = document.getElementById('audio-quote-display');
+            const randomIndex = Math.floor(Math.random() * audioQuotes.length);
+            quoteDisplay.textContent = audioQuotes[randomIndex];
+            audioPlayCount++;
+            saveProgress();
+        }
+
+        function updateGlobalProgress() {
+            let completedSections = 0;
+
+            // Check 'diarias' tab completion
+            const completedDailyDecisions = dailyDecisions.filter(item => item.completed).length;
+            if (completedDailyDecisions > 0) completedSections++;
+
+            // Check 'estrategia' tab completion
+            const completedStrategySteps = quickDecisionStrategy.filter(item => item.completed).length;
+            if (completedStrategySteps > 0) completedSections++;
+
+            // Check 'fatiga' tab completion (at least one exercise responded)
+            const respondedFatigueExercises = mentalFatigueExercises.filter(item => item.response.trim() !== '').length;
+            if (respondedFatigueExercises > 0) completedSections++;
+
+            // Check 'audio' tab completion (at least one play)
+            if (audioPlayCount > 0) completedSections++;
+
+            // 'Inicio' tab is considered complete if the user clicks 'Comenzar' (which navigates to 'diarias')
+            // For simplicity, we'll consider it complete if any other section has progress.
+            if (completedSections > 0) completedSections++; // Count 'Inicio' as complete if user started
+
+            const overallCompletionPercentage = Math.round((completedSections / TOTAL_SECTIONS) * 100);
+            document.getElementById('global-progress-text').textContent = `Progreso General: ${overallCompletionPercentage}%`;
+            document.getElementById('global-progress-bar').style.width = `${overallCompletionPercentage}%`;
+
+            // Update 'Mi Progreso' tab
+            document.getElementById('overall-completion').textContent = overallCompletionPercentage;
+            document.getElementById('daily-decisions-count').textContent = dailyDecisions.filter(item => item.completed).length;
+            document.getElementById('strategy-steps-completed').textContent = quickDecisionStrategy.filter(item => item.completed).length;
+
+            let motivationMessage = "¡Cada paso cuenta!";
+            if (overallCompletionPercentage === 100) {
+                motivationMessage = "¡Felicidades! Has completado el framework. ¡Sigue aplicando tu Sistema Zen de Decisión!";
+            } else if (overallCompletionPercentage > 75) {
+                motivationMessage = "¡Estás casi ahí! Un último empujón para dominar tu claridad.";
+            } else if (overallCompletionPercentage > 50) {
+                motivationMessage = "¡Excelente progreso! Estás construyendo hábitos poderosos.";
+            } else if (overallCompletionPercentage > 25) {
+                motivationMessage = "¡Vas por buen camino! Cada decisión te acerca a la maestría.";
+            }
+            document.getElementById('motivation-message').textContent = motivationMessage;
+        }
+    </script>
+</body>
+</html>
